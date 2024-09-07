@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ProjectWebAirlineMVC.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +15,12 @@ namespace ProjectWebAirlineMVC
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+            RunSeeding(host);
+            host.Run();
         }
+
+       
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
@@ -22,5 +28,17 @@ namespace ProjectWebAirlineMVC
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+
+        private static void RunSeeding(IHost host)
+        {
+            var scopeFactory = host.Services.GetService<IServiceScopeFactory>();
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var seeder = scope.ServiceProvider.GetService<SeedDb>();
+                seeder.SeedAsync().Wait();
+            }
+        }
+
     }
 }

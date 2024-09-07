@@ -7,6 +7,8 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
         public int Id { get; set; }
 
+
+        [Required]
         public string Name { get; set; }
 
 
@@ -18,6 +20,7 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
 
         [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = false)]
+        [Required]
         public int Capacity { get; set; }
 
     }
