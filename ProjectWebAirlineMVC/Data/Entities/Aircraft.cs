@@ -2,10 +2,11 @@
 
 namespace ProjectWebAirlineMVC.Data.Entities
 {
-    public class Aircraft
+    public class Aircraft : IEntity
     {
 
         public int Id { get; set; }
+
 
 
         [Required]
@@ -13,7 +14,7 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
 
 
-        [Display(Name ="Image")]
+        [Display(Name = "Image")]
         public string ImageUrl { get; set; }
 
 

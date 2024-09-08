@@ -33,6 +33,9 @@ namespace ProjectWebAirlineMVC
             services.AddTransient<SeedDb>();
 
 
+            services.AddScoped<IAircraftRepository, AircraftRepository>();
+
+
             services.AddControllersWithViews();
         }
 

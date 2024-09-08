@@ -13,12 +13,12 @@ namespace ProjectWebAirlineMVC.Controllers
     public class AircraftController : Controller
     {
         private readonly DataContext _context;
-        private readonly IRepository _repository;
+        private readonly IAircraftRepository _aircraftRepository;
 
-        public AircraftController(DataContext context, IRepository repository)
+        public AircraftController(DataContext context, IAircraftRepository aircraftRepository)
         {
             _context = context;
-            _repository = repository;
+            _aircraftRepository = aircraftRepository;
         }
 
 
@@ -26,7 +26,7 @@ namespace ProjectWebAirlineMVC.Controllers
         // GET: Aircraft
         public async Task<IActionResult> Index()
         {
-            return View(_repository.GetAircrafts());
+            return View(_aircraftRepository.GetAll());
         }
 
         // GET: Aircraft/Details/5
@@ -37,7 +37,7 @@ namespace ProjectWebAirlineMVC.Controllers
                 return NotFound();
             }
 
-            var aircraft = _repository.GetAircraft(id.Value);
+            var aircraft = await _aircraftRepository.GetByIdAsync(id.Value);
             if (aircraft == null)
             {
                 return NotFound();
@@ -57,12 +57,11 @@ namespace ProjectWebAirlineMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ImageUrl,Capacity")] Aircraft aircraft)
+        public async Task<IActionResult> Create(Aircraft aircraft)
         {
             if (ModelState.IsValid)
             {
-               _repository.AddAircraft(aircraft);
-                await _repository.SaveAllAsync();
+               _aircraftRepository.CreateAsync(aircraft);
                 return RedirectToAction("Index");
             }
 
@@ -77,7 +76,7 @@ namespace ProjectWebAirlineMVC.Controllers
                 return NotFound();
             }
 
-            var aircraft = _repository.GetAircraft(id.Value);
+            var aircraft = _aircraftRepository.GetByIdAsync(id.Value);
             if (aircraft == null)
             {
                 return NotFound();
@@ -90,7 +89,7 @@ namespace ProjectWebAirlineMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ImageUrl,Capacity")] Aircraft aircraft)
+        public async Task<IActionResult> Edit(int id, Aircraft aircraft)
         {
             if (id != aircraft.Id)
             {
@@ -101,12 +100,11 @@ namespace ProjectWebAirlineMVC.Controllers
             {
                 try
                 {
-                   _repository.UpdateAircraft(aircraft);
-                    await _repository.SaveAllAsync();
+                   await _aircraftRepository.UpdateAsync(aircraft);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_repository.AircraftExists(aircraft.Id))
+                    if (! await _aircraftRepository.ExistAsync(aircraft.Id))
                     {
                         return NotFound();
                     }
@@ -128,7 +126,7 @@ namespace ProjectWebAirlineMVC.Controllers
                 return NotFound();
             }
 
-            var aircraft = _repository.GetAircraft(id.Value);
+            var aircraft = _aircraftRepository.GetByIdAsync(id.Value);
             if (aircraft == null)
             {
                 return NotFound();
@@ -142,14 +140,13 @@ namespace ProjectWebAirlineMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var aircraft = _repository.GetAircraft(id);
+            var aircraft =  await _aircraftRepository.GetByIdAsync(id);
 
             if(aircraft != null)
             {
-                _repository.RemoveAircraft(aircraft);
+                await _aircraftRepository.DeleteAsync(aircraft);
             }
 
-            await _repository.SaveAllAsync();
 
             return RedirectToAction(nameof(Index));
         }
