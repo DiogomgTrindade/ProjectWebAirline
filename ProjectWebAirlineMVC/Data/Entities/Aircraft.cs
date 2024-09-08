@@ -20,9 +20,12 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
 
 
-        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = false)]
         [Required]
         public int Capacity { get; set; }
+
+
+        public User User { get; set; }
+
 
     }
 }

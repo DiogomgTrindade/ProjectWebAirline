@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebAirlineMVC.Data;
 using ProjectWebAirlineMVC.Data.Entities;
+using ProjectWebAirlineMVC.Helpers;
 
 namespace ProjectWebAirlineMVC.Controllers
 {
@@ -14,11 +15,13 @@ namespace ProjectWebAirlineMVC.Controllers
     {
         private readonly DataContext _context;
         private readonly IAircraftRepository _aircraftRepository;
+        private readonly IUserHelper _userHelper;
 
-        public AircraftController(DataContext context, IAircraftRepository aircraftRepository)
+        public AircraftController(DataContext context, IAircraftRepository aircraftRepository, IUserHelper userHelper)
         {
             _context = context;
             _aircraftRepository = aircraftRepository;
+            _userHelper = userHelper;
         }
 
 
@@ -26,7 +29,7 @@ namespace ProjectWebAirlineMVC.Controllers
         // GET: Aircraft
         public async Task<IActionResult> Index()
         {
-            return View(_aircraftRepository.GetAll());
+            return View(_aircraftRepository.GetAll().OrderBy(a => a.Name));
         }
 
         // GET: Aircraft/Details/5
@@ -52,16 +55,19 @@ namespace ProjectWebAirlineMVC.Controllers
             return View();
         }
 
-        // POST: Aircraft/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Aircraft aircraft)
         {
             if (ModelState.IsValid)
             {
-               _aircraftRepository.CreateAsync(aircraft);
+
+                //TODO: Modificar para o user que estiver logado
+                aircraft.User = await _userHelper.GetUserByEmailAsync("diogovsky1904@gmail.com");
+               await _aircraftRepository.CreateAsync(aircraft);
                 return RedirectToAction("Index");
             }
 
@@ -75,6 +81,7 @@ namespace ProjectWebAirlineMVC.Controllers
             {
                 return NotFound();
             }
+
 
             var aircraft = _aircraftRepository.GetByIdAsync(id.Value);
             if (aircraft == null)
@@ -100,7 +107,10 @@ namespace ProjectWebAirlineMVC.Controllers
             {
                 try
                 {
-                   await _aircraftRepository.UpdateAsync(aircraft);
+
+                    //TODO: Modificar para o user que estiver logado
+                    aircraft.User = await _userHelper.GetUserByEmailAsync("diogovsky1904@gmail.com");
+                    await _aircraftRepository.UpdateAsync(aircraft);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
