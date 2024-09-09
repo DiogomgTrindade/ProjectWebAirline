@@ -21,7 +21,7 @@ namespace ProjectWebAirlineMVC.Controllers.API
         [HttpGet]
         public IActionResult GetAircrafts()
         {
-            return Ok(_aircraftRepository.GetAll());
+            return Ok(_aircraftRepository.GetAllWithUsers());
         }
 
     }

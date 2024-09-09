@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectWebAirlineMVC.Data;
 using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Helpers;
+using ProjectWebAirlineMVC.Models;
 
 namespace ProjectWebAirlineMVC.Controllers
 {
@@ -60,10 +62,34 @@ namespace ProjectWebAirlineMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Aircraft aircraft)
+        public async Task<IActionResult> Create(AircraftViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var path = string.Empty;
+
+
+                //Imagens
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                {
+                    var guid = Guid.NewGuid().ToString();
+                    var file = $"{guid}.jpg";
+
+
+                    path = Path.Combine(Directory.GetCurrentDirectory(),
+                        "wwwroot\\images\\aircrafts",
+                        file);
+
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await model.ImageFile.CopyToAsync(stream);
+                    }
+
+                    path = $"~/images/aircrafts/{file}";
+                }
+
+                var aircraft = this.ToAircraft(model,path);
 
                 //TODO: Modificar para o user que estiver logado
                 aircraft.User = await _userHelper.GetUserByEmailAsync("diogovsky1904@gmail.com");
@@ -71,7 +97,19 @@ namespace ProjectWebAirlineMVC.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(aircraft);
+            return View(model);
+        }
+
+        private Aircraft ToAircraft(AircraftViewModel model, string path)
+        {
+            return new Aircraft
+            {
+                Id = model.Id,
+                Name = model.Name,
+                ImageUrl = path,
+                Capacity = model.Capacity,
+                User = model.User
+            };
         }
 
         // GET: Aircraft/Edit/5
@@ -88,7 +126,23 @@ namespace ProjectWebAirlineMVC.Controllers
             {
                 return NotFound();
             }
-            return View(aircraft);
+
+            var model = this.ToAircraftViewModel(await aircraft);
+
+            return View(model);
+        }
+
+
+        private AircraftViewModel ToAircraftViewModel(Aircraft aircraft)
+        {
+            return new AircraftViewModel
+            {
+                Id = aircraft.Id,
+                Name = aircraft.Name,
+                ImageUrl = aircraft.ImageUrl,
+                Capacity = aircraft.Capacity,
+                User = aircraft.User
+            };
         }
 
         // POST: Aircraft/Edit/5
@@ -96,17 +150,36 @@ namespace ProjectWebAirlineMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Aircraft aircraft)
+        public async Task<IActionResult> Edit(AircraftViewModel model)
         {
-            if (id != aircraft.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var guid = Guid.NewGuid().ToString();
+                    var file = $"{guid}.jpg";
+
+
+                    var path = model.ImageUrl;
+
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        path = Path.Combine(Directory.GetCurrentDirectory(),
+                            "wwwroot\\images\\aircrafts",
+                            file);
+
+
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            await model.ImageFile.CopyToAsync(stream);
+                        }
+
+
+                        path = $"~/images/products/{file}";
+                    }
+
+                    var aircraft = this.ToAircraft(model, path);
+
 
                     //TODO: Modificar para o user que estiver logado
                     aircraft.User = await _userHelper.GetUserByEmailAsync("diogovsky1904@gmail.com");
@@ -114,7 +187,7 @@ namespace ProjectWebAirlineMVC.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (! await _aircraftRepository.ExistAsync(aircraft.Id))
+                    if (! await _aircraftRepository.ExistAsync(model.Id))
                     {
                         return NotFound();
                     }
@@ -125,7 +198,7 @@ namespace ProjectWebAirlineMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(aircraft);
+            return View(model);
         }
 
         // GET: Aircraft/Delete/5
@@ -136,7 +209,7 @@ namespace ProjectWebAirlineMVC.Controllers
                 return NotFound();
             }
 
-            var aircraft = _aircraftRepository.GetByIdAsync(id.Value);
+            var aircraft = await _aircraftRepository.GetByIdAsync(id.Value);
             if (aircraft == null)
             {
                 return NotFound();
