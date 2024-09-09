@@ -12,22 +12,8 @@
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="ImageUrl" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageFile" class="control-label"></label>
-                <input asp-for="ImageFile" class="form-control" />
-                <span asp-validation-for="ImageFile" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Capacity" class="control-label"></label>
-                <input asp-for="Capacity" class="form-control" />
-                <span asp-validation-for="Capacity" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="ImageId" />
+            <partial name="_Aircrafts" />
             <br />
 
 
@@ -40,10 +26,7 @@
     </div>
     <div class="col-md-4">
         <td>
-            @if (!string.IsNullOrEmpty(Model.ImageUrl))
-            {
-                <img src="@Url.Content(Model.ImageUrl)" alt="Image" style="width: 400px; height:350px; max-width:100%" ; height="auto" />
-            }
+            <img src="@Url.Content(Model.ImageFullPath)" alt="Image" style="width: 400px; height:350px; max-width:100%" ; height="auto" />
         </td>
     </div>
 </div>

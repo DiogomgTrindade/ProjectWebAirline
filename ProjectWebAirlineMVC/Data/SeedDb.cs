@@ -67,7 +67,6 @@ namespace ProjectWebAirlineMVC.Data
             {
                 Name = name,
                 Capacity = _random.Next(100, 500),
-                ImageUrl = string.Empty,
                 User = user
             });
         }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjectWebAirlineMVC.Data.Entities
 {
@@ -15,7 +16,7 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
 
         [Display(Name = "Image")]
-        public string ImageUrl { get; set; }
+        public Guid ImageId{ get; set; }
 
 
 
@@ -27,19 +28,10 @@ namespace ProjectWebAirlineMVC.Data.Entities
         public User User { get; set; }
 
 
-        public string ImageFullPath
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(ImageFullPath))
-                {
-                    return null;
-                }
-                return $"https://localhost:44330/{ImageUrl.Substring(1)}";
-            }
 
-        }
-
+        public string ImageFullPath => ImageId == Guid.Empty
+            ? $"https://supershopdmgt.azurewebsites.net/images/noimage.png"
+            : $"https://supershopdmgt.blob.core.windows.net/aircrafts/{ImageId}";
 
 
     }

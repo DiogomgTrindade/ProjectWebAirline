@@ -18,20 +18,20 @@ namespace ProjectWebAirlineMVC.Controllers
         private readonly DataContext _context;
         private readonly IAircraftRepository _aircraftRepository;
         private readonly IUserHelper _userHelper;
-        private readonly IImageHelper _imageHelper;
+        private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
 
 
         public AircraftController(DataContext context,
             IAircraftRepository aircraftRepository,
             IUserHelper userHelper,
-            IImageHelper imageHelper,
+            IBlobHelper blobHelper,
             IConverterHelper converterHelper)
         {
             _context = context;
             _aircraftRepository = aircraftRepository;
             _userHelper = userHelper;
-            _imageHelper = imageHelper;
+            _blobHelper = blobHelper;
             _converterHelper = converterHelper;
         }
 
@@ -75,17 +75,17 @@ namespace ProjectWebAirlineMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                var path = string.Empty;
+                Guid imageId = Guid.Empty;
 
 
                 //Imagens
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
-                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "aircrafts");
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "aircrafts");
 
                 }
 
-                var aircraft = _converterHelper.ToAircraft(model, path, true);
+                var aircraft = _converterHelper.ToAircraft(model, imageId, true);
 
                 //TODO: Modificar para o user que estiver logado
                 aircraft.User = await _userHelper.GetUserByEmailAsync("diogovsky1904@gmail.com");
@@ -131,14 +131,14 @@ namespace ProjectWebAirlineMVC.Controllers
                 try
                 {
 
-                    var path = model.ImageUrl;
+                    Guid imageId = model.ImageId;
 
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
-                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "aircrafts");
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "aircrafts");
                     }
 
-                    var aircraft = _converterHelper.ToAircraft(model, path, true);
+                    var aircraft = _converterHelper.ToAircraft(model, imageId, true);
 
 
                     //TODO: Modificar para o user que estiver logado
