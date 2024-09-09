@@ -86,6 +86,7 @@ namespace ProjectWebAirlineMVC
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

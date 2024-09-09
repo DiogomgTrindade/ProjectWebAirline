@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ProjectWebAirlineMVC.Data.Entities;
+using ProjectWebAirlineMVC.Models;
 using System.Threading.Tasks;
 
 namespace ProjectWebAirlineMVC.Helpers
@@ -11,5 +12,8 @@ namespace ProjectWebAirlineMVC.Helpers
         Task<IdentityResult> AddUserAsync (User user, string password);
 
 
+        Task<SignInResult> LoginAsync(LoginViewModel model);
+
+        Task LogOutAsync();
     }
 }
