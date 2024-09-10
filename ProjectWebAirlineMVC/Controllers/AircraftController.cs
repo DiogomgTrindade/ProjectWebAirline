@@ -89,8 +89,7 @@ namespace ProjectWebAirlineMVC.Controllers
 
                 var aircraft = _converterHelper.ToAircraft(model, imageId, true);
 
-                //TODO: Modificar para o user que estiver logado
-                aircraft.User = await _userHelper.GetUserByEmailAsync("diogovsky1904@gmail.com");
+                aircraft.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                await _aircraftRepository.CreateAsync(aircraft);
                 return RedirectToAction("Index");
             }
@@ -146,7 +145,7 @@ namespace ProjectWebAirlineMVC.Controllers
 
 
                     //TODO: Modificar para o user que estiver logado
-                    aircraft.User = await _userHelper.GetUserByEmailAsync("diogovsky1904@gmail.com");
+                    aircraft.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                     await _aircraftRepository.UpdateAsync(aircraft);
                 }
                 catch (DbUpdateConcurrencyException)
