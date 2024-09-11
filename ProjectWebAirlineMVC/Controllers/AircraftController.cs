@@ -61,8 +61,10 @@ namespace ProjectWebAirlineMVC.Controllers
             return View(aircraft);
         }
 
+
+
         // GET: Aircraft/Create
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -99,7 +101,7 @@ namespace ProjectWebAirlineMVC.Controllers
 
 
         // GET: Aircraft/Edit/5
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -165,7 +167,7 @@ namespace ProjectWebAirlineMVC.Controllers
         }
 
         // GET: Aircraft/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

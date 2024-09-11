@@ -12,8 +12,8 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
 
 
-        [Display(Name = "Image")]
-        public Guid ImageId { get; set; }
+        //[Display(Name = "Image")]
+        //public Guid ImageId { get; set; }
 
 
         //public string ImageFullPath => ImageId == Guid.Empty

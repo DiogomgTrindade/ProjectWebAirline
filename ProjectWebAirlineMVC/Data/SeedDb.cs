@@ -25,6 +25,11 @@ namespace ProjectWebAirlineMVC.Data
         {
             await _context.Database.MigrateAsync();
 
+
+            await _userHelper.CheckRolesAsync("Admin");
+            await _userHelper.CheckRolesAsync("Customer");
+
+
             var user = await _userHelper.GetUserByEmailAsync("diogovsky1904@gmail.com");
             if(user == null)
             {
@@ -43,6 +48,15 @@ namespace ProjectWebAirlineMVC.Data
                     throw new InvalidOperationException("Could not create the user in seeder");
                 };
 
+
+                await _userHelper.AddUserToRoleAsync(user, "Admin");
+
+            }
+
+            var isInRole = await _userHelper.IsUserInRoleAsync(user, "Admin");
+            if(!isInRole)
+            {
+                await _userHelper.AddUserToRoleAsync(user, "Admin");
             }
 
 
