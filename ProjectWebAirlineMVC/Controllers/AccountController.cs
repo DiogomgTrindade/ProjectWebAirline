@@ -189,6 +189,11 @@ namespace ProjectWebAirlineMVC.Controllers
         }
         
 
+        public IActionResult NotAuthorized()
+        {
+            return View();
+        }
+
 
     }
 }

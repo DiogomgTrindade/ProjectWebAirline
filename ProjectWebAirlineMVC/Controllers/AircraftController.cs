@@ -49,13 +49,13 @@ namespace ProjectWebAirlineMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StudentNotFound");
             }
 
             var aircraft = await _aircraftRepository.GetByIdAsync(id.Value);
             if (aircraft == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StudentNotFound");
             }
 
             return View(aircraft);
@@ -106,14 +106,14 @@ namespace ProjectWebAirlineMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StudentNotFound");
             }
 
 
             var aircraft = await _aircraftRepository.GetByIdAsync(id.Value);
             if (aircraft == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StudentNotFound");
             }
 
             var model = _converterHelper.ToAircraftViewModel(aircraft);
@@ -154,7 +154,7 @@ namespace ProjectWebAirlineMVC.Controllers
                 {
                     if (! await _aircraftRepository.ExistAsync(model.Id))
                     {
-                        return NotFound();
+                        return new NotFoundViewResult("StudentNotFound");
                     }
                     else
                     {
@@ -172,13 +172,13 @@ namespace ProjectWebAirlineMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StudentNotFound");
             }
 
             var aircraft = await _aircraftRepository.GetByIdAsync(id.Value);
             if (aircraft == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StudentNotFound");
             }
 
             return View(aircraft);
