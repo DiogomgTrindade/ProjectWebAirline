@@ -95,6 +95,9 @@ namespace ProjectWebAirlineMVC.Controllers
                         EmailAddress = model.EmailAddress,
                     };
 
+                    await _userHelper.AddUserToRoleAsync(user, "Customer");
+
+
                     var result2 = await _userHelper.LoginAsync(loginViewModel);
                     if(result2.Succeeded)
                     {
