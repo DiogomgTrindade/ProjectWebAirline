@@ -10,6 +10,7 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
         public string LastName { get; set; }
 
+        public string FullName => $"{FirstName} {LastName}";
 
 
         //[Display(Name = "Image")]

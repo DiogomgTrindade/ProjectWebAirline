@@ -29,9 +29,17 @@ namespace ProjectWebAirlineMVC.Data
             await _userHelper.CheckRolesAsync("Admin");
             await _userHelper.CheckRolesAsync("Customer");
 
+            AddCountry("Portugal");
+            AddCountry("Espanha");
+            AddCountry("Alemanha");
+            AddCountry("França");
+
+            await _context.SaveChangesAsync();
+
+
 
             var user = await _userHelper.GetUserByEmailAsync("diogovsky1904@gmail.com");
-            if(user == null)
+            if (user == null)
             {
                 user = new User
                 {
@@ -54,7 +62,7 @@ namespace ProjectWebAirlineMVC.Data
             }
 
             var isInRole = await _userHelper.IsUserInRoleAsync(user, "Admin");
-            if(!isInRole)
+            if (!isInRole)
             {
                 await _userHelper.AddUserToRoleAsync(user, "Admin");
             }
@@ -84,6 +92,17 @@ namespace ProjectWebAirlineMVC.Data
                 User = user
             });
         }
+
+
+        private void AddCountry(string name)
+        {
+            _context.Countries.Add(new Country
+            {
+                Name = name
+            });
+
+        }
     }
 }
+
 

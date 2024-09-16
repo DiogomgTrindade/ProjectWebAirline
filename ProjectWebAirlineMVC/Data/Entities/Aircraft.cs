@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjectWebAirlineMVC.Data.Entities
@@ -26,7 +28,6 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
 
         public User User { get; set; }
-
 
 
         public string ImageFullPath => ImageId == Guid.Empty

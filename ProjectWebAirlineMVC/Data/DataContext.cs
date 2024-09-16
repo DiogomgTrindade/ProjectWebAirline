@@ -8,7 +8,9 @@ namespace ProjectWebAirlineMVC.Data
     {
         public DbSet<Aircraft> Aircrafts { get; set; }
 
+        public DbSet<Flight> Flights { get; set; }
 
+        public DbSet<Country> Countries { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
