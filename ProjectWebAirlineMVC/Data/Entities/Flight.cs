@@ -9,7 +9,7 @@ namespace ProjectWebAirlineMVC.Data.Entities
         public int Id {  get; set; }
 
 
-
+        [Display(Name ="Origin")]
         public int OriginCountryId { get; set; }
         public Country OriginCountry { get; set; }
 
@@ -19,6 +19,7 @@ namespace ProjectWebAirlineMVC.Data.Entities
         public DateTime Date { get; set; }
 
 
+        [Display(Name = "Destination")]
         public int DestinationCountryId { get; set; }
         public Country DestinationCountry { get; set; }
 

@@ -7,22 +7,30 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebAirlineMVC.Data;
 using ProjectWebAirlineMVC.Data.Entities;
+using ProjectWebAirlineMVC.Helpers;
+using ProjectWebAirlineMVC.Models;
 
 namespace ProjectWebAirlineMVC.Controllers
 {
     public class CountriesController : Controller
     {
+        private readonly DataContext _context;
         private readonly ICountryRepository _countryRepository;
+        private readonly IBlobHelper _blobHelper;
+        private readonly IConverterHelper _converterHelper;
 
-        public CountriesController(ICountryRepository countryRepository)
+        public CountriesController(DataContext context ,ICountryRepository countryRepository, IBlobHelper blobHelper, IConverterHelper converterHelper)
         {
+            _context = context;
             _countryRepository = countryRepository;
+            _blobHelper = blobHelper;
+            _converterHelper = converterHelper;
         }
 
         // GET: Countries
         public async Task<IActionResult> Index()
         {
-            return View(_countryRepository.GetAll());
+            return View(_countryRepository.GetAll().OrderBy(c => c.Name));
         }
 
         // GET: Countries/Details/5
@@ -50,14 +58,25 @@ namespace ProjectWebAirlineMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Country country)
+        public async Task<IActionResult> Create(CountryViewModel model)
         {
             if (ModelState.IsValid)
             {
-               await _countryRepository.CreateAsync(country);
-                return RedirectToAction(nameof(Index));
+                Guid imageId = Guid.Empty;
+
+
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                {
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "countries");
+                }
+
+                var country = _converterHelper.ToCountry(model, imageId, true);
+
+
+                await _countryRepository.CreateAsync(country);
+                return RedirectToAction("Index");
             }
-            return View(country);
+            return View(model);
         }
 
         // GET: Countries/Edit/5
@@ -73,30 +92,37 @@ namespace ProjectWebAirlineMVC.Controllers
             {
                 return NotFound();
             }
-            return View(country);
+
+            var model = _converterHelper.ToCountryViewModel(country);
+
+            return View(model);
         }
 
-        // POST: Countries/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Country country)
+        public async Task<IActionResult> Edit(CountryViewModel model)
         {
-            if (id != country.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
+                    Guid imageId = model.ImageId;
+
+                    if(model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "countries");
+                    }
+
+                    var country = _converterHelper.ToCountry(model, imageId, false);
+
+
                     await _countryRepository.UpdateAsync(country);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await _countryRepository.ExistAsync(id)) 
+                    if (!await _countryRepository.ExistAsync(model.Id)) 
                     {
                         return NotFound();
                     }
@@ -105,9 +131,9 @@ namespace ProjectWebAirlineMVC.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
-            return View(country);
+            return View(model);
         }
 
         // GET: Countries/Delete/5
