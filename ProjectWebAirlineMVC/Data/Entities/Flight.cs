@@ -10,8 +10,8 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
 
 
-        [Required]
-        public Country Origin { get; set; }
+        public int OriginCountryId { get; set; }
+        public Country OriginCountry { get; set; }
 
 
         [Required]
@@ -19,11 +19,11 @@ namespace ProjectWebAirlineMVC.Data.Entities
         public DateTime Date { get; set; }
 
 
-        [Required]
-        public Country Destination { get; set; }
+        public int DestinationCountryId { get; set; }
+        public Country DestinationCountry { get; set; }
 
 
-        public ICollection<Country> Countries { get; set; }
+
 
 
         [Required]

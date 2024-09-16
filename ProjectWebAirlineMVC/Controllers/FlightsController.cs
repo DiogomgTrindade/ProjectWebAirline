@@ -29,7 +29,7 @@ namespace ProjectWebAirlineMVC.Controllers
         // GET: Flights
         public async Task<IActionResult> Index()
         {
-            return View( _flightRepository.GetAll());
+            return View(_flightRepository.GetAll());
         }
 
         // GET: Flights/Details/5
@@ -113,7 +113,7 @@ namespace ProjectWebAirlineMVC.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
 
-                        return NotFound();
+                    return NotFound();
 
                 }
 
