@@ -19,15 +19,15 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Origin" class="control-label"></label>
-                <select asp-for="Origin" asp-items="ViewBag.Countries" class="form-control"></select>
-                <span asp-validation-for="Origin" class="text-danger"></span>
+                <label asp-for="OriginCountryId" class="control-label"></label>
+                <select asp-for="OriginCountryId" asp-items="ViewBag.Countries" class="form-control"></select>
+                <span asp-validation-for="OriginCountryId" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Destination" class="control-label"></label>
-                <select asp-for="Destination" asp-items="ViewBag.Countries" class="form-control"></select>
-                <span asp-validation-for="Destination" class="text-danger"></span>
+                <label asp-for="DestinationCountryId" class="control-label"></label>
+                <select asp-for="DestinationCountryId" asp-items="ViewBag.Countries" class="form-control"></select>
+                <span asp-validation-for="DestinationCountryId" class="text-danger"></span>
             </div>
 
             <div class="form-group">

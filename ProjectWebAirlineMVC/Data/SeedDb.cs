@@ -34,7 +34,6 @@ namespace ProjectWebAirlineMVC.Data
             AddCountry("Alemanha");
             AddCountry("França");
 
-            await _context.SaveChangesAsync();
 
 
 

@@ -17,5 +17,23 @@ namespace ProjectWebAirlineMVC.Data
             
         }
 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Flight>()
+                .HasOne(f => f.OriginCountry)
+                .WithMany() 
+                .HasForeignKey(f => f.OriginCountryId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<Flight>()
+                .HasOne(f => f.DestinationCountry)
+                .WithMany() 
+                .HasForeignKey(f => f.DestinationCountryId)
+                .OnDelete(DeleteBehavior.Restrict);  
+        }
+
     }
 }
