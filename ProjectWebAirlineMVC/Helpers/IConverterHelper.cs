@@ -10,5 +10,9 @@ namespace ProjectWebAirlineMVC.Helpers
         Aircraft ToAircraft(AircraftViewModel model, Guid imageId, bool isNew);
 
         AircraftViewModel ToAircraftViewModel(Aircraft aircraft);
+
+        Country ToCountry (CountryViewModel model, Guid imageId, bool isNews);
+
+        CountryViewModel ToCountryViewModel(Country country);
     }
 }

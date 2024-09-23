@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace ProjectWebAirlineMVC.Helpers
+namespace ProjectWebAirlineMVC.Models
 {
     public class NotFoundViewResult : ViewResult
     {

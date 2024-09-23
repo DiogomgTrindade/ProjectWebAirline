@@ -29,5 +29,25 @@ namespace ProjectWebAirlineMVC.Helpers
                 User = aircraft.User,
             };
         }
+
+        public Country ToCountry(CountryViewModel model, Guid imageId, bool isNews)
+        {
+            return new Country
+            {
+                Id = isNews ? 0 : model.Id,
+                ImageId = imageId,
+                Name = model.Name
+            };
+        }
+
+        public CountryViewModel ToCountryViewModel(Country country)
+        {
+            return new CountryViewModel
+            {
+                Id = country.Id,
+                ImageId = country.ImageId,
+                Name = country.Name,
+            };
+        }
     }
 }

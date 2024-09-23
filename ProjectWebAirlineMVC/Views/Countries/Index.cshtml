@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Countries</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -23,6 +23,13 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                    @if (!string.IsNullOrEmpty(item.ImageFullPath))
+                    {
+                        
+                        <img src="@Url.Content(item.ImageFullPath)" alt="Image" style="width:100px; height:100px; max-width:100%" height="auto" />
+                    }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

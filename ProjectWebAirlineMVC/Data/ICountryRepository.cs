@@ -11,7 +11,7 @@ namespace ProjectWebAirlineMVC.Data
 
         IEnumerable<SelectListItem> GetComboCountries();
 
-
+        Task<List<Country>> GetCountryListAsync();
 
     }
 }
