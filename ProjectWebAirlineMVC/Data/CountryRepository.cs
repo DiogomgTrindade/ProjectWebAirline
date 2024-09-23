@@ -26,7 +26,7 @@ namespace ProjectWebAirlineMVC.Data
 
             list.Insert(0, new SelectListItem
             {
-                Text = "(Please select a country..)",
+                Text = "Select a country...",
                 Value = "0"
             });
 

@@ -9,12 +9,15 @@ namespace ProjectWebAirlineMVC.Data
 {
     public interface IFlightRepository : IGenericRepository<Flight>
     {
-        //Task<IQueryable<Flight>> GetFlightAsync(int id);
+        public IQueryable GetAllWithUsersAndAircrafts();
 
 
-        //Task<Flight> GetCountryAsync(Country country);
+        Task<Flight> GetByIdWithUsersAndAircraftsAsync(int id);
 
+        Task<IEnumerable<Flight>> GetAllFlightsWithCountriesAsync();
 
-
+        Task<Flight> GetByIdWithCountries(int id);
     }
+
 }
+

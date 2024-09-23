@@ -1,11 +1,23 @@
-﻿using ProjectWebAirlineMVC.Data.Entities;
+﻿using ProjectWebAirlineMVC.Data;
+using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace ProjectWebAirlineMVC.Helpers
 {
     public class ConverterHelper : IConverterHelper
     {
+
+        private readonly IAircraftRepository _aircraftRepository;
+        private readonly IUserHelper _userHelper;
+
+        public ConverterHelper(IAircraftRepository aircraftRepository, IUserHelper userHelper)
+        {
+            _aircraftRepository = aircraftRepository;
+            _userHelper = userHelper;
+        }
+
         public Aircraft ToAircraft(AircraftViewModel model, Guid imageId, bool isNew)
         {
             return new Aircraft
@@ -47,6 +59,32 @@ namespace ProjectWebAirlineMVC.Helpers
                 Id = country.Id,
                 ImageId = country.ImageId,
                 Name = country.Name,
+            };
+        }
+
+        public async Task<Flight> ToFlightAsync(FlightViewModel model, User user)
+        {
+            return await Task.FromResult(new Flight
+            {
+                Id = model.Id,
+                Date = model.Date,
+                OriginCountryId = model.OriginCountryId,
+                DestinationCountryId = model.DestinationCountryId,
+                User = user
+            });
+        }
+
+        public async Task<FlightViewModel> ToFlightViewModel(Flight flight, User flightuser)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(flightuser.UserName);
+
+            return new FlightViewModel
+            {
+                Id =flight.Id,
+                Date = flight.Date,
+                OriginCountryId = flight.OriginCountryId,
+                DestinationCountryId = flight.DestinationCountryId,
+                User = user
             };
         }
     }
