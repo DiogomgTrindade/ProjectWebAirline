@@ -45,7 +45,9 @@ namespace ProjectWebAirlineMVC.Controllers
                 return NotFound();
             }
 
-            var flight = await _flightRepository.GetByIdAsync(id.Value);
+            var flights = await _flightRepository.GetAllFlightsWithCountriesAsync();
+            var flight = flights.FirstOrDefault(f => f.Id == id.Value);
+               
             if (flight == null)
             {
                 return NotFound();
@@ -158,7 +160,8 @@ namespace ProjectWebAirlineMVC.Controllers
                 return NotFound();
             }
 
-            var flight = await _flightRepository.GetByIdAsync(id.Value);
+            var flights = await _flightRepository.GetAllFlightsWithCountriesAsync();
+            var flight = flights.FirstOrDefault(f => f.Id == id.Value);
             if (flight == null)
             {
                 return NotFound();

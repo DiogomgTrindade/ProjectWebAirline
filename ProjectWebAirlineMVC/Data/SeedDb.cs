@@ -28,6 +28,8 @@ namespace ProjectWebAirlineMVC.Data
 
             await _userHelper.CheckRolesAsync("Admin");
             await _userHelper.CheckRolesAsync("Customer");
+            await _userHelper.CheckRolesAsync("Worker");
+
 
             AddCountry("Portugal");
             AddCountry("Espanha");

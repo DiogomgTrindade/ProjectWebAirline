@@ -10,10 +10,24 @@
     <h4>Flight</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
+        <dt class="col-sm-2">
+            Origin
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.OriginCountry.Name)
+        </dd>
+
+        <dt class="col-sm-2">
+            Destination
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DestinationCountry.Name)
+        </dd>
+
+        <dt class="col-sm-2">
+            Data
+        </dt>
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Date)
         </dd>
     </dl>

@@ -11,6 +11,9 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
         [Display(Name ="Origin")]
         public int OriginCountryId { get; set; }
+
+
+        [Display(Name = "Origin")]
         public Country OriginCountry { get; set; }
 
 
@@ -21,6 +24,8 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
         [Display(Name = "Destination")]
         public int DestinationCountryId { get; set; }
+
+        [Display(Name = "Destination")]
         public Country DestinationCountry { get; set; }
 
 
