@@ -83,7 +83,7 @@ namespace ProjectWebAirlineMVC.Controllers
             {
                 var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
-                var flight = await _converterHelper.ToFlightAsync(model, user);
+                var flight = _converterHelper.ToFlightAsync(model);
 
                 await _flightRepository.CreateAsync(flight); 
                 return RedirectToAction(nameof(Index));
@@ -95,14 +95,6 @@ namespace ProjectWebAirlineMVC.Controllers
                 Value = country.Id.ToString(),
                 Text = country.Name
             }).ToList();
-
-
-            //// Log model errors
-            //foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-            //{
-            //    Console.WriteLine(error.ErrorMessage);
-            //}
-
 
 
             return View(model);
@@ -121,26 +113,30 @@ namespace ProjectWebAirlineMVC.Controllers
             {
                 return NotFound();
             }
-            return View(flight);
+            var model = _converterHelper.ToFlightViewModel(flight);
+
+            var countries = await _countryRepository.GetCountryListAsync();
+            model.Countries = countries.Select(country => new SelectListItem
+            {
+                Value = country.Id.ToString(),
+                Text = country.Name
+            });
+
+            return View(model);
         }
 
-        // POST: Flights/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Flight flight)
+        public async Task<IActionResult> Edit(FlightViewModel model)
         {
-            if (id != flight.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                   await _flightRepository.UpdateAsync(flight);
+                    var flight =  _converterHelper.ToFlightAsync(model);
+
+                    await _flightRepository.UpdateAsync(flight);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -151,7 +147,7 @@ namespace ProjectWebAirlineMVC.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(flight);
+            return View(model);
         }
 
         // GET: Flights/Delete/5
@@ -162,7 +158,7 @@ namespace ProjectWebAirlineMVC.Controllers
                 return NotFound();
             }
 
-            var flight = _flightRepository.GetByIdAsync(id.Value);
+            var flight = await _flightRepository.GetByIdAsync(id.Value);
             if (flight == null)
             {
                 return NotFound();

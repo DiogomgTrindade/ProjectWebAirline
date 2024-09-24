@@ -62,21 +62,20 @@ namespace ProjectWebAirlineMVC.Helpers
             };
         }
 
-        public async Task<Flight> ToFlightAsync(FlightViewModel model, User user)
+        public Flight ToFlightAsync(FlightViewModel model)
         {
-            return await Task.FromResult(new Flight
+            return new Flight
             {
                 Id = model.Id,
                 Date = model.Date,
                 OriginCountryId = model.OriginCountryId,
                 DestinationCountryId = model.DestinationCountryId,
-                User = user
-            });
+                User = model.User
+            };
         }
 
-        public async Task<FlightViewModel> ToFlightViewModel(Flight flight, User flightuser)
+        public FlightViewModel ToFlightViewModel(Flight flight)
         {
-            var user = await _userHelper.GetUserByEmailAsync(flightuser.UserName);
 
             return new FlightViewModel
             {
@@ -84,8 +83,9 @@ namespace ProjectWebAirlineMVC.Helpers
                 Date = flight.Date,
                 OriginCountryId = flight.OriginCountryId,
                 DestinationCountryId = flight.DestinationCountryId,
-                User = user
+                User = flight.User
             };
         }
+
     }
 }

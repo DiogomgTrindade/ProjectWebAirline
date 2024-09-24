@@ -16,9 +16,9 @@ namespace ProjectWebAirlineMVC.Helpers
 
         CountryViewModel ToCountryViewModel(Country country);
 
-        Task<Flight> ToFlightAsync (FlightViewModel model, User user);
+        Flight ToFlightAsync (FlightViewModel model);
 
-        Task<FlightViewModel> ToFlightViewModel(Flight flight, User user);
+        FlightViewModel ToFlightViewModel(Flight flight);
 
     }
 }

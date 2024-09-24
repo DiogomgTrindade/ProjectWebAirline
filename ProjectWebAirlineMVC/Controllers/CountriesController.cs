@@ -28,10 +28,11 @@ namespace ProjectWebAirlineMVC.Controllers
         }
 
         // GET: Countries
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(_countryRepository.GetAll().OrderBy(c => c.Name));
+            return View( _countryRepository.GetAll().OrderBy(c => c.Name));
         }
+
 
         // GET: Countries/Details/5
         public async Task<IActionResult> Details(int? id)
