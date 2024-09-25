@@ -10,6 +10,7 @@ using ProjectWebAirlineMVC.Data;
 using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Helpers;
 using ProjectWebAirlineMVC.Models;
+using NotFoundViewResult = ProjectWebAirlineMVC.Helpers.NotFoundViewResult;
 
 namespace ProjectWebAirlineMVC.Controllers
 {
@@ -42,7 +43,7 @@ namespace ProjectWebAirlineMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("FlightNotFound");
             }
 
             var flights = await _flightRepository.GetAllFlightsWithCountriesAsync();
@@ -50,7 +51,7 @@ namespace ProjectWebAirlineMVC.Controllers
                
             if (flight == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("FlightNotFound"); 
             }
 
             return View(flight);
@@ -60,6 +61,7 @@ namespace ProjectWebAirlineMVC.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
+            //TODO: Add Aircrafts
             var countries = await _countryRepository.GetCountryListAsync();
             var model = new FlightViewModel
             {
@@ -107,13 +109,13 @@ namespace ProjectWebAirlineMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("FlightNotFound");
             }
 
             var flight = await _flightRepository.GetByIdAsync(id.Value);
             if (flight == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("FlightNotFound");
             }
             var model = _converterHelper.ToFlightViewModel(flight);
 
@@ -143,7 +145,7 @@ namespace ProjectWebAirlineMVC.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
 
-                        return NotFound();
+                        return new NotFoundViewResult("FlightNotFound");
 
                 }
 
@@ -157,14 +159,14 @@ namespace ProjectWebAirlineMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("FlightNotFound");
             }
 
             var flights = await _flightRepository.GetAllFlightsWithCountriesAsync();
             var flight = flights.FirstOrDefault(f => f.Id == id.Value);
             if (flight == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("FlightNotFound");
             }
 
             return View(flight);

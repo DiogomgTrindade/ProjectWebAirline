@@ -11,6 +11,7 @@ using ProjectWebAirlineMVC.Data;
 using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Helpers;
 using ProjectWebAirlineMVC.Models;
+using NotFoundViewResult = ProjectWebAirlineMVC.Helpers.NotFoundViewResult;
 
 namespace ProjectWebAirlineMVC.Controllers
 {
@@ -146,7 +147,6 @@ namespace ProjectWebAirlineMVC.Controllers
 
 
 
-                    //TODO: Modificar para o user que estiver logado
                     aircraft.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                     await _aircraftRepository.UpdateAsync(aircraft);
                 }

@@ -124,169 +124,78 @@ body {
 
 
 
-/*Page not Found - 404*/
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700');
-@import url('https://fonts.googleapis.com/css?family=Catamaran:400,800');
-
-.error-container {
-    text-align: center;
-    font-size: 180px;
-    font-family: 'Catamaran', sans-serif;
-    font-weight: 800;
-    margin: 20px 15px;
+/* -----------------------------------------------------404 Error Page---------------------------------------------------*/
+#oopss {
+    background: linear-gradient(-45deg, #fff300, #efe400);
+    position: fixed;
+    left: 0px;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    line-height: 1.5em;
+    z-index: 9999;
 }
 
-    .error-container > span {
-        display: inline-block;
-        line-height: 0.7;
-        position: relative;
-        color: #FFB485;
+    #oopss #error-text {
+        font-size: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: 'Shabnam', Tahoma, sans-serif;
+        color: #000;
+        direction: rtl;
     }
 
-    .error-container > span {
-        display: inline-block;
-        position: relative;
-        vertical-align: middle;
-    }
-
-        .error-container > span:nth-of-type(1) {
-            color: #D1F2A5;
-            animation: colordancing 4s infinite;
+        #oopss #error-text img {
+            margin: 85px auto 20px;
+            height: 342px;
         }
 
-        .error-container > span:nth-of-type(3) {
-            color: #F56991;
-            animation: colordancing2 4s infinite;
+        #oopss #error-text span {
+            position: relative;
+            font-size: 3.3em;
+            font-weight: 900;
+            margin-bottom: 50px;
         }
 
-        .error-container > span:nth-of-type(2) {
-            width: 120px;
-            height: 120px;
-            border-radius: 999px;
+        #oopss #error-text p.p-a {
+            font-size: 19px;
+            margin: 30px 0 15px 0;
         }
 
-            .error-container > span:nth-of-type(2):before,
-            .error-container > span:nth-of-type(2):after {
-                border-radius: 0%;
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: inherit;
-                height: inherit;
-                border-radius: 999px;
-                box-shadow: inset 30px 0 0 rgba(209, 242, 165, 0.4), inset 0 30px 0 rgba(239, 250, 180, 0.4), inset -30px 0 0 rgba(255, 196, 140, 0.4), inset 0 -30px 0 rgba(245, 105, 145, 0.4);
-                animation: shadowsdancing 4s infinite;
+        #oopss #error-text p.p-b {
+            font-size: 15px;
+        }
+
+        #oopss #error-text .back {
+            background: #fff;
+            color: #000;
+            font-size: 30px;
+            text-decoration: none;
+            margin: 2em auto 0;
+            padding: .7em 2em;
+            border-radius: 500px;
+            box-shadow: 0 20px 70px 4px rgba(0, 0, 0, 0.1), inset 7px 33px 0 0px #fff300;
+            font-weight: 900;
+            transition: all 300ms ease;
+        }
+
+            #oopss #error-text .back:hover {
+                -webkit-transform: translateY(-13px);
+                transform: translateY(-13px);
+                box-shadow: 0 35px 90px 4px rgba(0, 0, 0, 0.3), inset 0px 0 0 3px #000;
             }
 
-            .error-container > span:nth-of-type(2):before {
-                -webkit-transform: rotate(45deg);
-                -moz-transform: rotate(45deg);
-                transform: rotate(45deg);
-            }
-
-.screen-reader-text {
-    position: absolute;
-    top: -9999em;
-    left: -9999em;
+@font-face {
+    font-family: Shabnam;
+    src: url("https://cdn.rawgit.com/ahmedhosna95/upload/ba6564f8/fonts/Shabnam/Shabnam-Bold.eot");
+    src: url("https://cdn.rawgit.com/ahmedhosna95/upload/ba6564f8/fonts/Shabnam/Shabnam-Bold.eot?#iefix") format("embedded-opentype"), url("https://cdn.rawgit.com/ahmedhosna95/upload/ba6564f8/fonts/Shabnam/Shabnam-Bold.woff") format("woff"), url("https://cdn.rawgit.com/ahmedhosna95/upload/ba6564f8/fonts/Shabnam/Shabnam-Bold.woff2") format("woff2"), url("https://cdn.rawgit.com/ahmedhosna95/upload/ba6564f8/fonts/Shabnam/Shabnam-Bold.ttf") format("truetype");
+    font-weight: bold;
 }
 
-@keyframes shadowsdancing {
-    0% {
-        box-shadow: inset 30px 0 0 rgba(209, 242, 165, 0.4), inset 0 30px 0 rgba(239, 250, 180, 0.4), inset -30px 0 0 rgba(255, 196, 140, 0.4), inset 0 -30px 0 rgba(245, 105, 145, 0.4);
-    }
-
-    25% {
-        box-shadow: inset 30px 0 0 rgba(245, 105, 145, 0.4), inset 0 30px 0 rgba(209, 242, 165, 0.4), inset -30px 0 0 rgba(239, 250, 180, 0.4), inset 0 -30px 0 rgba(255, 196, 140, 0.4);
-    }
-
-    50% {
-        box-shadow: inset 30px 0 0 rgba(255, 196, 140, 0.4), inset 0 30px 0 rgba(245, 105, 145, 0.4), inset -30px 0 0 rgba(209, 242, 165, 0.4), inset 0 -30px 0 rgba(239, 250, 180, 0.4);
-    }
-
-    75% {
-        box-shadow: inset 30px 0 0 rgba(239, 250, 180, 0.4), inset 0 30px 0 rgba(255, 196, 140, 0.4), inset -30px 0 0 rgba(245, 105, 145, 0.4), inset 0 -30px 0 rgba(209, 242, 165, 0.4);
-    }
-
-    100% {
-        box-shadow: inset 30px 0 0 rgba(209, 242, 165, 0.4), inset 0 30px 0 rgba(239, 250, 180, 0.4), inset -30px 0 0 rgba(255, 196, 140, 0.4), inset 0 -30px 0 rgba(245, 105, 145, 0.4);
-    }
-}
-
-@keyframes colordancing {
-    0% {
-        color: #D1F2A5;
-    }
-
-    25% {
-        color: #F56991;
-    }
-
-    50% {
-        color: #FFC48C;
-    }
-
-    75% {
-        color: #EFFAB4;
-    }
-
-    100% {
-        color: #D1F2A5;
-    }
-}
-
-@keyframes colordancing2 {
-    0% {
-        color: #FFC48C;
-    }
-
-    25% {
-        color: #EFFAB4;
-    }
-
-    50% {
-        color: #D1F2A5;
-    }
-
-    75% {
-        color: #F56991;
-    }
-
-    100% {
-        color: #FFC48C;
-    }
-}
-
-
-
-.erro_h1 {
-    text-align: center;
-    margin: 30px 15px;
-}
-
-.zoom-area {
-    max-width: 490px;
-    margin: 30px auto 30px;
-    font-size: 19px;
-    text-align: center;
-}
-
-.link-container {
-    text-align: center;
-}
-
-a.more-link {
-    text-transform: uppercase;
-    font-size: 13px;
-    background-color: #92a4ad;
-    padding: 10px 15px;
-    border-radius: 0;
-    color: #416475;
-    display: inline-block;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    line-height: 1.5;
-    text-decoration: none;
-    margin-top: 50px;
-    letter-spacing: 1px;
+@font-face {
+    font-family: Shabnam;
+    src: url("https://cdn.rawgit.com/ahmedhosna95/upload/ba6564f8/fonts/Shabnam/Shabnam.eot");
+    src: url("https://cdn.rawgit.com/ahmedhosna95/upload/ba6564f8/fonts/Shabnam/Shabnam.eot?#iefix") format("embedded-opentype"), url("https://cdn.rawgit.com/ahmedhosna95/upload/ba6564f8/fonts/Shabnam/Shabnam.woff") format("woff"), url("https://cdn.rawgit.com/ahmedhosna95/upload/ba6564f8/fonts/Shabnam/Shabnam.woff2") format("woff2"), url("https://cdn.rawgit.com/ahmedhosna95/upload/ba6564f8/fonts/Shabnam/Shabnam.ttf") format("truetype");
+    font-weight: normal;
 }

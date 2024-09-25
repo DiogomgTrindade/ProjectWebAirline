@@ -9,6 +9,7 @@ using ProjectWebAirlineMVC.Data;
 using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Helpers;
 using ProjectWebAirlineMVC.Models;
+using NotFoundViewResult = ProjectWebAirlineMVC.Helpers.NotFoundViewResult;
 
 namespace ProjectWebAirlineMVC.Controllers
 {
@@ -39,13 +40,13 @@ namespace ProjectWebAirlineMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CountryNotFound");
             }
 
             var country = await _countryRepository.GetByIdAsync(id.Value);
             if (country == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CountryNotFound");
             }
 
             return View(country);
@@ -85,13 +86,13 @@ namespace ProjectWebAirlineMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CountryNotFound");
             }
 
             var country = await _countryRepository.GetByIdAsync(id.Value);
             if (country == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CountryNotFound");
             }
 
             var model = _converterHelper.ToCountryViewModel(country);
@@ -125,7 +126,7 @@ namespace ProjectWebAirlineMVC.Controllers
                 {
                     if (!await _countryRepository.ExistAsync(model.Id)) 
                     {
-                        return NotFound();
+                        return new NotFoundViewResult("CountryNotFound");
                     }
                     else
                     {
@@ -142,13 +143,13 @@ namespace ProjectWebAirlineMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CountryNotFound");
             }
 
             var country = await _countryRepository.GetByIdAsync(id.Value);
             if (country == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CountryNotFound");
             }
 
             return View(country);
