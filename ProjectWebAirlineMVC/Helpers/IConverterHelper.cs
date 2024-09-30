@@ -12,11 +12,11 @@ namespace ProjectWebAirlineMVC.Helpers
 
         AircraftViewModel ToAircraftViewModel(Aircraft aircraft);
 
-        Country ToCountry (CountryViewModel model, Guid imageId, bool isNews);
+        Country ToCountry (CountryViewModel model, Guid imageId, bool isNew);
 
         CountryViewModel ToCountryViewModel(Country country);
 
-        Flight ToFlightAsync (FlightViewModel model);
+        Flight ToFlightAsync (FlightViewModel model, bool isNew);
 
         FlightViewModel ToFlightViewModel(Flight flight);
 

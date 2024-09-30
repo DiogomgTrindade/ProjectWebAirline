@@ -11,8 +11,13 @@ namespace ProjectWebAirlineMVC.Models
         public int Id { get; set; }
 
 
+        [Display(Name = "Flight Number")]
+        public int FlightNumber { get; set; }
 
         public IEnumerable<SelectListItem> Countries { get; set; }
+
+        public IEnumerable<SelectListItem> Aircrafts { get; set; }
+
 
 
         [Required]
@@ -33,6 +38,12 @@ namespace ProjectWebAirlineMVC.Models
         [Required]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime Date { get; set; }
+
+
+
+        [Display(Name = "Aircraft")]
+        public int AircraftId { get; set; }
+        public Aircraft Aircraft { get; set; }
 
 
 

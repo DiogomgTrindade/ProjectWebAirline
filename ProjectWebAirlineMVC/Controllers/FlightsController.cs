@@ -18,14 +18,16 @@ namespace ProjectWebAirlineMVC.Controllers
     {
         private readonly IFlightRepository _flightRepository;
         private readonly ICountryRepository _countryRepository;
+        private readonly IAircraftRepository _aircraftRepository;
         private readonly IUserHelper _userHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
 
-        public FlightsController(IFlightRepository flightRepository, ICountryRepository countryRepository, IUserHelper userHelper, IBlobHelper blobHelper, IConverterHelper converterHelper)
+        public FlightsController(IFlightRepository flightRepository, ICountryRepository countryRepository, IUserHelper userHelper, IBlobHelper blobHelper, IConverterHelper converterHelper, IAircraftRepository aircraftRepository)
         {
             _flightRepository = flightRepository;
             _countryRepository = countryRepository;
+            _aircraftRepository = aircraftRepository;
             _userHelper = userHelper;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
@@ -34,9 +36,10 @@ namespace ProjectWebAirlineMVC.Controllers
         // GET: Flights
         public async Task<IActionResult> Index()
         {
-            var flights = await _flightRepository.GetAllFlightsWithCountriesAsync();
+            var flights = await _flightRepository.GetAllFlightsWithCountriesAndAircraftAsync();
             return View(flights);
         }
+
 
         // GET: Flights/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -46,7 +49,7 @@ namespace ProjectWebAirlineMVC.Controllers
                 return new NotFoundViewResult("FlightNotFound");
             }
 
-            var flights = await _flightRepository.GetAllFlightsWithCountriesAsync();
+            var flights = await _flightRepository.GetAllFlightsWithCountriesAndAircraftAsync();
             var flight = flights.FirstOrDefault(f => f.Id == id.Value);
                
             if (flight == null)
@@ -57,11 +60,14 @@ namespace ProjectWebAirlineMVC.Controllers
             return View(flight);
         }
 
+
+
         // GET: Flights/Create
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             //TODO: Add Aircrafts
+            var aircrafts = await _aircraftRepository.GetAircraftListAsync();
             var countries = await _countryRepository.GetCountryListAsync();
             var model = new FlightViewModel
             {
@@ -69,6 +75,12 @@ namespace ProjectWebAirlineMVC.Controllers
                 {
                     Value = country.Id.ToString(),
                     Text = country.Name
+                }).ToList(),
+
+                Aircrafts = aircrafts.Select(aircraft => new SelectListItem
+                {
+                    Value = aircraft.Id.ToString(),
+                    Text = aircraft.Name
                 }).ToList()
 
             };
@@ -85,9 +97,21 @@ namespace ProjectWebAirlineMVC.Controllers
 
             if (ModelState.IsValid)
             {
+                var aircraft = await _aircraftRepository.GetByIdAsync(model.AircraftId);
+                if (aircraft == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Aircraft invalid. Please select a valid aircraft.");
+                    return View(model);
+                }
+
                 var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
-                var flight = _converterHelper.ToFlightAsync(model);
+                model.Aircraft = aircraft;
+                model.User = user;
+
+                var flight = _converterHelper.ToFlightAsync(model, true);
+
+                
 
                 await _flightRepository.CreateAsync(flight); 
                 return RedirectToAction(nameof(Index));
@@ -98,6 +122,13 @@ namespace ProjectWebAirlineMVC.Controllers
             {
                 Value = country.Id.ToString(),
                 Text = country.Name
+            }).ToList();
+
+            var aircrafts = await _aircraftRepository.GetAircraftListAsync();
+            model.Aircrafts = aircrafts.Select(aircraft => new SelectListItem
+            {
+                Value = aircraft.Id.ToString(),
+                Text = aircraft.Name
             }).ToList();
 
 
@@ -126,6 +157,13 @@ namespace ProjectWebAirlineMVC.Controllers
                 Text = country.Name
             });
 
+            var aircrafts = await _aircraftRepository.GetAircraftListAsync();
+            model.Aircrafts = aircrafts.Select(aircraft => new SelectListItem
+            {
+                Value = aircraft.Id.ToString(),
+                Text = aircraft.Name
+            });
+
             return View(model);
         }
 
@@ -138,7 +176,7 @@ namespace ProjectWebAirlineMVC.Controllers
             {
                 try
                 {
-                    var flight =  _converterHelper.ToFlightAsync(model);
+                    var flight =  _converterHelper.ToFlightAsync(model, false);
 
                     await _flightRepository.UpdateAsync(flight);
                 }

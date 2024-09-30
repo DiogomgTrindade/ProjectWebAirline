@@ -28,6 +28,12 @@ namespace ProjectWebAirlineMVC.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Flight>()
+                .HasOne(f => f.Aircraft)
+                .WithMany()
+                .HasForeignKey(f => f.AircraftId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Flight>()
                 .HasOne(f => f.OriginCountry)
                 .WithMany() 
                 .HasForeignKey(f => f.OriginCountryId)

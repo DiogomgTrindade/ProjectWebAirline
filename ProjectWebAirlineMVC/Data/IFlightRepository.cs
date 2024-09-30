@@ -17,7 +17,12 @@ namespace ProjectWebAirlineMVC.Data
         Task<IEnumerable<Flight>> GetAllFlightsWithCountriesAsync();
 
         Task<Flight> GetByIdWithCountries(int id);
-    }
 
+
+        public IQueryable GetAllWithCountriesAndAircrafts();
+
+        Task<IEnumerable<Flight>> GetAllFlightsWithCountriesAndAircraftAsync();
+
+    }
 }
 

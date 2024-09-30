@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjectWebAirlineMVC.Data.Entities;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ProjectWebAirlineMVC.Data
 {
@@ -15,9 +17,18 @@ namespace ProjectWebAirlineMVC.Data
             _context = context;
         }
 
+       
+
         public IQueryable GetAllWithUsers()
         {
             return _context.Aircrafts.Include(p => p.User);
         }
+
+
+        public Task<List<Aircraft>> GetAircraftListAsync()
+        {
+            return _context.Aircrafts.ToListAsync();
+        }
+
     }
 }

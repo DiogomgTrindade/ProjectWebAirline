@@ -12,6 +12,12 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.First().FlightNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Aircraft)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.First().OriginCountry)
             </th>
             <th>
@@ -27,6 +33,12 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FlightNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Aircraft.Name)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.OriginCountry.Name) 
                 </td>

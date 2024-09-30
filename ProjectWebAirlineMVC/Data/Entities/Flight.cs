@@ -9,6 +9,11 @@ namespace ProjectWebAirlineMVC.Data.Entities
         public int Id {  get; set; }
 
 
+        [Display(Name = "Flight Number")]
+        public int FlightNumber { get; set; }
+
+
+
         [Display(Name ="Origin")]
         public int OriginCountryId { get; set; }
 
@@ -29,7 +34,9 @@ namespace ProjectWebAirlineMVC.Data.Entities
         public Country DestinationCountry { get; set; }
 
 
-
+        [Display(Name ="Aircraft")]
+        public int AircraftId { get; set; }
+        public Aircraft Aircraft { get; set; }
 
 
         [Required]

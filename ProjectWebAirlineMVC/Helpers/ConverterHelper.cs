@@ -42,11 +42,11 @@ namespace ProjectWebAirlineMVC.Helpers
             };
         }
 
-        public Country ToCountry(CountryViewModel model, Guid imageId, bool isNews)
+        public Country ToCountry(CountryViewModel model, Guid imageId, bool isNew)
         {
             return new Country
             {
-                Id = isNews ? 0 : model.Id,
+                Id = isNew ? 0 : model.Id,
                 ImageId = imageId,
                 Name = model.Name
             };
@@ -62,14 +62,16 @@ namespace ProjectWebAirlineMVC.Helpers
             };
         }
 
-        public Flight ToFlightAsync(FlightViewModel model)
+        public Flight ToFlightAsync(FlightViewModel model, bool isNew)
         {
             return new Flight
             {
-                Id = model.Id,
+                Id = isNew ? 0 : model.Id,
                 Date = model.Date,
                 OriginCountryId = model.OriginCountryId,
                 DestinationCountryId = model.DestinationCountryId,
+                AircraftId = model.AircraftId,
+                FlightNumber = model.FlightNumber,
                 User = model.User
             };
         }
@@ -79,10 +81,12 @@ namespace ProjectWebAirlineMVC.Helpers
 
             return new FlightViewModel
             {
-                Id =flight.Id,
+                Id = flight.Id,
                 Date = flight.Date,
                 OriginCountryId = flight.OriginCountryId,
                 DestinationCountryId = flight.DestinationCountryId,
+                AircraftId = flight.AircraftId,
+                FlightNumber = flight.FlightNumber,
                 User = flight.User
             };
         }
