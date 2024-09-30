@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjectWebAirlineMVC.Data.Entities;
+using ProjectWebAirlineMVC.Data.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjectWebAirlineMVC.Data
+namespace ProjectWebAirlineMVC.Data.Repositories
 {
     public class AircraftRepository : GenericRepository<Aircraft>, IAircraftRepository
     {
@@ -12,12 +13,12 @@ namespace ProjectWebAirlineMVC.Data
 
 
         public AircraftRepository(DataContext context)
-            :base (context)
+            : base(context)
         {
             _context = context;
         }
 
-       
+
 
         public IQueryable GetAllWithUsers()
         {

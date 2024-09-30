@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjectWebAirlineMVC.Data
+namespace ProjectWebAirlineMVC.Data.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {

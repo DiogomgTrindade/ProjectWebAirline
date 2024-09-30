@@ -23,8 +23,8 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
 
         [Required]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]
-        public DateTime Date { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime Date { get; set; } = DateTime.Now;
 
 
         [Display(Name = "Destination")]

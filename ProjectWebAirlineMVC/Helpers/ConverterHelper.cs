@@ -1,5 +1,5 @@
-﻿using ProjectWebAirlineMVC.Data;
-using ProjectWebAirlineMVC.Data.Entities;
+﻿using ProjectWebAirlineMVC.Data.Entities;
+using ProjectWebAirlineMVC.Data.Interfaces;
 using ProjectWebAirlineMVC.Models;
 using System;
 using System.Threading.Tasks;

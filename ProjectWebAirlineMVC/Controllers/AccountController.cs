@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ProjectWebAirlineMVC.Data;
 using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Helpers;
 using ProjectWebAirlineMVC.Models;
@@ -187,7 +188,7 @@ namespace ProjectWebAirlineMVC.Controllers
 
             return this.View(model);
         }
-        
+
 
         public IActionResult NotAuthorized()
         {

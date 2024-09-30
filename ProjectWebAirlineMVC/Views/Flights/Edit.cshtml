@@ -12,8 +12,13 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="OriginCountryId" />
+            <input type="hidden" asp-for="DestinationCountryId" />
+            <input type="hidden" asp-for="AircraftId" />
+
 
             <partial name="_Flights"/>
+
 
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

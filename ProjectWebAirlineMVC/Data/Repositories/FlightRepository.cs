@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebAirlineMVC.Data.Entities;
+using ProjectWebAirlineMVC.Data.Interfaces;
 using ProjectWebAirlineMVC.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjectWebAirlineMVC.Data
+namespace ProjectWebAirlineMVC.Data.Repositories
 {
     public class FlightRepository : GenericRepository<Flight>, IFlightRepository
     {
@@ -21,7 +22,7 @@ namespace ProjectWebAirlineMVC.Data
             _aircraftRepository = aircraftRepository;
         }
 
-        
+
 
         public async Task<IEnumerable<Flight>> GetAllFlightsWithCountriesAsync()
         {
@@ -31,7 +32,7 @@ namespace ProjectWebAirlineMVC.Data
                 .ToListAsync();
         }
 
-       
+
 
         public IQueryable GetAllWithUsersAndAircrafts()
         {

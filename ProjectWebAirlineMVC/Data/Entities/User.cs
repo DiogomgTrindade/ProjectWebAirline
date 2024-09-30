@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System;
+using System.Security.Principal;
 
 namespace ProjectWebAirlineMVC.Data.Entities
 {
@@ -11,6 +12,7 @@ namespace ProjectWebAirlineMVC.Data.Entities
         public string LastName { get; set; }
 
         public string FullName => $"{FirstName} {LastName}";
+
 
 
         //[Display(Name = "Image")]

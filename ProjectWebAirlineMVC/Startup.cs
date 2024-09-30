@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProjectWebAirlineMVC.Data;
 using ProjectWebAirlineMVC.Data.Entities;
+using ProjectWebAirlineMVC.Data.Interfaces;
+using ProjectWebAirlineMVC.Data.Repositories;
 using ProjectWebAirlineMVC.Helpers;
 using System;
 using System.Collections.Generic;

@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjectWebAirlineMVC.Data.Entities;
+using ProjectWebAirlineMVC.Data.Interfaces;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjectWebAirlineMVC.Data
+namespace ProjectWebAirlineMVC.Data.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class, IEntity
     {

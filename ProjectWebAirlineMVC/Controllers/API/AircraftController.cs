@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ProjectWebAirlineMVC.Data;
+using ProjectWebAirlineMVC.Data.Interfaces;
 
 namespace ProjectWebAirlineMVC.Controllers.API
 {
