@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ProjectWebAirlineMVC.Data;
 using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Helpers;
 using ProjectWebAirlineMVC.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,10 +14,14 @@ namespace ProjectWebAirlineMVC.Controllers
     public class AccountController : Controller
     {
         private readonly IUserHelper _userHelper;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AccountController(IUserHelper userHelper)
+        public AccountController(IUserHelper userHelper, RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
             _userHelper = userHelper;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
 
@@ -189,6 +195,73 @@ namespace ProjectWebAirlineMVC.Controllers
             return this.View(model);
         }
 
+        public async Task<IActionResult> UsersListWithRoles()
+        {
+            var users = _userManager.Users.ToList().OrderBy(u => u.FullName);
+            var userRolesViewModel = new List<UserRolesViewModel>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userRolesViewModel.Add(new UserRolesViewModel
+                {
+                    UserId = user.Id,
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    CurrentRole = roles.FirstOrDefault(),
+                    AvailableRoles = _roleManager.Roles.Select(r => r.Name).ToList()
+                });
+
+            }
+                return View (userRolesViewModel);
+        }
+
+        public async Task<IActionResult> ChangeUserRole(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var currentRoles = await _userManager.GetRolesAsync(user);
+
+            var roles = _roleManager.Roles.Select(r => new SelectListItem
+            {
+                Value = r.Name,
+                Text = r.Name,
+                Selected = r.Name == currentRoles.FirstOrDefault()
+            }).ToList();
+
+            var model = new ChangeUserRoleViewModel
+            {
+                UserId = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                CurrentRole = currentRoles.FirstOrDefault(),
+                Roles = roles
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeUserRole(ChangeUserRoleViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var currentRoles = await _userManager.GetRolesAsync(user);
+
+            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+            await _userManager.AddToRoleAsync(user, model.CurrentRole);
+
+            return RedirectToAction("UsersListWithRoles");
+        }
 
         public IActionResult NotAuthorized()
         {

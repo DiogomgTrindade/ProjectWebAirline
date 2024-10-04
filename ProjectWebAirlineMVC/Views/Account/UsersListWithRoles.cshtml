@@ -1,0 +1,27 @@
+﻿@model List<ProjectWebAirlineMVC.Models.UserRolesViewModel>
+
+<h2>Users List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.FullName</td>
+                <td>@user.Email</td>
+                <td>@user.CurrentRole</td>
+                <td>
+                    <a class="btn btn-primary" asp-action="ChangeUserRole" asp-route-userId="@user.UserId">Change Role</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
