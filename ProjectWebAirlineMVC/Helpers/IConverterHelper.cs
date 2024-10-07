@@ -16,7 +16,7 @@ namespace ProjectWebAirlineMVC.Helpers
 
         CountryViewModel ToCountryViewModel(Country country);
 
-        Flight ToFlightAsync (FlightViewModel model, bool isNew);
+        Flight ToFlight (FlightViewModel model, bool isNew);
 
         FlightViewModel ToFlightViewModel(Flight flight);
 

@@ -62,7 +62,7 @@ namespace ProjectWebAirlineMVC.Helpers
             };
         }
 
-        public Flight ToFlightAsync(FlightViewModel model, bool isNew)
+        public Flight ToFlight(FlightViewModel model, bool isNew)
         {
             return new Flight
             {

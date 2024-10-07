@@ -115,7 +115,7 @@ namespace ProjectWebAirlineMVC.Controllers
                 model.Aircraft = aircraft;
                 model.User = user;
 
-                var flight = _converterHelper.ToFlightAsync(model, true);
+                var flight = _converterHelper.ToFlight(model, true);
 
                 await _flightRepository.CreateAsync(flight);
                 flight.Aircraft = aircraft;
@@ -194,11 +194,31 @@ namespace ProjectWebAirlineMVC.Controllers
                         return new NotFoundViewResult("FlightNotFound");
                     }
 
+                    bool isAircraftChanged = existingFlight.AircraftId != model.AircraftId;
+
+                    existingFlight.OriginCountryId = model.OriginCountryId;
+                    existingFlight.DestinationCountryId = model.DestinationCountryId;
+                    existingFlight.Date = model.Date;
+                    existingFlight.AircraftId = model.AircraftId;
                     model.FlightNumber = existingFlight.FlightNumber;
 
-                    var flight =  _converterHelper.ToFlightAsync(model, false);
+                    await _flightRepository.UpdateAsync(existingFlight);
 
-                    await _flightRepository.UpdateAsync(flight);
+                    if (isAircraftChanged)
+                    {
+                        var aircraft = await _aircraftRepository.GetByIdAsync(model.AircraftId);
+                        if (aircraft == null)
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid aircraft. Please select a valid aircraft.");
+                            return View(model);
+                        }
+
+                        existingFlight.Aircraft = aircraft;
+
+                        await _ticketRepository.UpdateTicketsFromFlightAsync(existingFlight);
+                    }
+
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -209,6 +229,21 @@ namespace ProjectWebAirlineMVC.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
+            var countries = await _countryRepository.GetCountryListAsync();
+            model.Countries = countries.Select(country => new SelectListItem
+            {
+                Value = country.Id.ToString(),
+                Text = country.Name
+            }).ToList();
+
+            var aircrafts = await _aircraftRepository.GetAircraftListAsync();
+            model.Aircrafts = aircrafts.Select(aircraft => new SelectListItem
+            {
+                Value = aircraft.Id.ToString(),
+                Text = aircraft.Name
+            }).ToList();
+
             return View(model);
         }
 
@@ -230,15 +265,24 @@ namespace ProjectWebAirlineMVC.Controllers
             return View(flight);
         }
 
-        // POST: Flights/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var flight = await _flightRepository.GetByIdAsync(id);
+
+            if (flight == null)
+            {
+                return new NotFoundViewResult("FlightNotFound");
+            }
+
+            await _ticketRepository.RemoveTicketsFromFlightAsync(flight);
+
             await _flightRepository.DeleteAsync(flight);
+
             return RedirectToAction(nameof(Index));
         }
+
 
     }
 }

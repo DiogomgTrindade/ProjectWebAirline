@@ -11,21 +11,41 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Hidden fields for IDs -->
             <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="OriginCountryId" />
-            <input type="hidden" asp-for="DestinationCountryId" />
-            <input type="hidden" asp-for="AircraftId" />
+            <input type="hidden" asp-for="FlightNumber" />
 
+            <!-- Data do voo -->
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+            </div>
 
-            <partial name="_Flights"/>
+            <!-- País de origem -->
+            <div class="form-group">
+                <label asp-for="OriginCountryId" class="control-label"></label>
+                <select asp-for="OriginCountryId" class="form-control" asp-items="Model.Countries"></select>
+            </div>
 
+            <!-- País de destino -->
+            <div class="form-group">
+                <label asp-for="DestinationCountryId" class="control-label"></label>
+                <select asp-for="DestinationCountryId" class="form-control" asp-items="Model.Countries"></select>
+            </div>
+
+            <!-- Aeronave -->
+            <div class="form-group">
+                <label asp-for="AircraftId" class="control-label"></label>
+                <select asp-for="AircraftId" class="form-control" asp-items="Model.Aircrafts"></select>
+            </div>
 
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
                 <a asp-action="Index">Back to List</a>
-
             </div>
         </form>
+
     </div>
 </div>
 
