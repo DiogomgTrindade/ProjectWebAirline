@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectWebAirlineMVC.Data.Entities
 {
@@ -38,6 +39,34 @@ namespace ProjectWebAirlineMVC.Data.Entities
         public int AircraftId { get; set; }
         public Aircraft Aircraft { get; set; }
 
+
+
+        [NotMapped]
+        public List<string> AvailableSeats
+        {
+            get
+            {
+                if (Aircraft == null || Aircraft.Capacity <= 0)
+                {
+                    return new List<string>();
+                }
+
+                var seats = new List<string>();
+
+                for(int i = 1; i <= Aircraft.Capacity; i++)
+                {
+                    seats.Add("Seat " + i);
+                }
+
+                return seats;
+            }
+        }
+
+
+        public int AvailableSeatsNumber => AvailableSeats.Count;
+
+
+        public List<Tickets> TicketList {  get; set; }
 
         [Required]
         public User User { get; set; }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Data.Interfaces;
 using ProjectWebAirlineMVC.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,12 +15,15 @@ namespace ProjectWebAirlineMVC.Data.Repositories
         private readonly DataContext _context;
         private readonly IUserHelper _userHelper;
         private readonly IAircraftRepository _aircraftRepository;
+        private readonly ITicketRepository _ticketRepository;
 
-        public FlightRepository(DataContext context, IUserHelper userHelper, IAircraftRepository aircraftRepository) : base(context)
+        public FlightRepository(DataContext context, IUserHelper userHelper, IAircraftRepository aircraftRepository, ITicketRepository ticketRepository) : base(context)
         {
             _context = context;
             _userHelper = userHelper;
             _aircraftRepository = aircraftRepository;
+            _ticketRepository = ticketRepository;
+
         }
 
 
@@ -77,8 +81,6 @@ namespace ProjectWebAirlineMVC.Data.Repositories
                 .Include(f => f.DestinationCountry)
                 .OrderBy(f => f.Date);
         }
-
-
 
     }
 }

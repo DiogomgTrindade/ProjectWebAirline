@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectWebAirlineMVC.Data.Entities
 {
@@ -33,6 +35,8 @@ namespace ProjectWebAirlineMVC.Data.Entities
         public string ImageFullPath => ImageId == Guid.Empty
             ? $"https://supershopdmgt.azurewebsites.net/images/noimage.png"
             : $"https://supershopdmgt.blob.core.windows.net/aircrafts/{ImageId}";
+
+
 
 
     }

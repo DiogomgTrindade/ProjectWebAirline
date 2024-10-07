@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Data.Interfaces;
+using ProjectWebAirlineMVC.Data.Repositories;
 using ProjectWebAirlineMVC.Helpers;
 using ProjectWebAirlineMVC.Models;
 using NotFoundViewResult = ProjectWebAirlineMVC.Helpers.NotFoundViewResult;
@@ -19,15 +20,17 @@ namespace ProjectWebAirlineMVC.Controllers
         private readonly IFlightRepository _flightRepository;
         private readonly ICountryRepository _countryRepository;
         private readonly IAircraftRepository _aircraftRepository;
+        private readonly ITicketRepository _ticketRepository;
         private readonly IUserHelper _userHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
 
-        public FlightsController(IFlightRepository flightRepository, ICountryRepository countryRepository, IUserHelper userHelper, IBlobHelper blobHelper, IConverterHelper converterHelper, IAircraftRepository aircraftRepository)
+        public FlightsController(IFlightRepository flightRepository, ICountryRepository countryRepository, IUserHelper userHelper, IBlobHelper blobHelper, IConverterHelper converterHelper, IAircraftRepository aircraftRepository, ITicketRepository ticketRepository)
         {
             _flightRepository = flightRepository;
             _countryRepository = countryRepository;
             _aircraftRepository = aircraftRepository;
+            _ticketRepository = ticketRepository;
             _userHelper = userHelper;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
@@ -114,25 +117,31 @@ namespace ProjectWebAirlineMVC.Controllers
 
                 var flight = _converterHelper.ToFlightAsync(model, true);
 
-                
+                await _flightRepository.CreateAsync(flight);
+                flight.Aircraft = aircraft;
 
-                await _flightRepository.CreateAsync(flight); 
+                await _ticketRepository.GenerateTicketsAsync(flight);
+
                 return RedirectToAction(nameof(Index));
             }
+
 
             var countries = await _countryRepository.GetCountryListAsync();
             model.Countries = countries.Select(country => new SelectListItem
             {
                 Value = country.Id.ToString(),
                 Text = country.Name
-            }).ToList();
+            }).ToList()
+            .OrderBy(c => c.Text);
+
 
             var aircrafts = await _aircraftRepository.GetAircraftListAsync();
             model.Aircrafts = aircrafts.Select(aircraft => new SelectListItem
             {
                 Value = aircraft.Id.ToString(),
                 Text = aircraft.Name
-            }).ToList();
+            }).ToList()
+            .OrderBy(a => a.Text);
 
 
             return View(model);

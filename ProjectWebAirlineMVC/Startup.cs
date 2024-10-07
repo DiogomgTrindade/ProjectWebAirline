@@ -85,6 +85,7 @@ namespace ProjectWebAirlineMVC
             services.AddScoped<IAircraftRepository, AircraftRepository>();
             services.AddScoped<IFlightRepository, FlightRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<ITicketRepository, TicketRepository>();
 
 
             services.ConfigureApplicationCookie(options =>

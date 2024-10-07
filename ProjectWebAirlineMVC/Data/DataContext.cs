@@ -12,6 +12,8 @@ namespace ProjectWebAirlineMVC.Data
 
         public DbSet<Country> Countries { get; set; }
 
+        public DbSet<Tickets> Tickets { get; set; }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
             
@@ -44,6 +46,12 @@ namespace ProjectWebAirlineMVC.Data
                 .WithMany() 
                 .HasForeignKey(f => f.DestinationCountryId)
                 .OnDelete(DeleteBehavior.Restrict);  
+
+            modelBuilder.Entity<Tickets>()
+                .HasOne(t => t.Flight)
+                .WithMany(f => f.TicketList)
+                .HasForeignKey(t => t.FlightId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
     }
