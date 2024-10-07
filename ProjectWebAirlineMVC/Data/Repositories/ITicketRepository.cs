@@ -7,5 +7,9 @@ namespace ProjectWebAirlineMVC.Data.Repositories
     public interface ITicketRepository : IGenericRepository<Tickets>
     {
         Task GenerateTicketsAsync(Flight flight);
+
+        Task RemoveTicketsFromFlightAsync(Flight flight);
+
+        Task UpdateTicketsFromFlightAsync(Flight flight);
     }
 }
