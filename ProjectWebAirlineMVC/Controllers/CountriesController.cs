@@ -156,13 +156,34 @@ namespace ProjectWebAirlineMVC.Controllers
             return View(country);
         }
 
-        // POST: Countries/Delete/5
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var country = await _countryRepository.GetByIdAsync(id);
-            await _countryRepository.DeleteAsync(country);
+            if(country == null)
+            {
+                return new NotFoundViewResult("CountryNotFound");
+            }
+
+            var associatedFlights = await _context.Flights.AnyAsync(f => f.OriginCountryId == id || f.DestinationCountryId == id);
+
+            if (associatedFlights)
+            {
+                ModelState.AddModelError(string.Empty, "The country is already listed on a flight, please delete the flight first.");
+                return View(country);
+            }
+
+            try
+            {
+                await _countryRepository.DeleteAsync(country);
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError(string.Empty, "Error trying to delete a country");
+                return View(country);
+            }
             return RedirectToAction(nameof(Index));
         }
     }

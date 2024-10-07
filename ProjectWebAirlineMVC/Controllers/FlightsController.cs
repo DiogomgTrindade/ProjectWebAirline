@@ -106,6 +106,9 @@ namespace ProjectWebAirlineMVC.Controllers
 
                 var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
+                Random random = new Random();
+                model.FlightNumber = random.Next(1000, 9999);
+
                 model.Aircraft = aircraft;
                 model.User = user;
 
@@ -176,6 +179,14 @@ namespace ProjectWebAirlineMVC.Controllers
             {
                 try
                 {
+                    var existingFlight = await _flightRepository.GetByIdAsync(model.Id);
+                    if (existingFlight == null)
+                    {
+                        return new NotFoundViewResult("FlightNotFound");
+                    }
+
+                    model.FlightNumber = existingFlight.FlightNumber;
+
                     var flight =  _converterHelper.ToFlightAsync(model, false);
 
                     await _flightRepository.UpdateAsync(flight);

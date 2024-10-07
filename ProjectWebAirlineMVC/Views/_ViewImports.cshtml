@@ -1,3 +1,6 @@
-﻿@using ProjectWebAirlineMVC
+﻿@using Microsoft.AspNetCore.Identity
+@using ProjectWebAirlineMVC
 @using ProjectWebAirlineMVC.Models
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@inject UserManager<ProjectWebAirlineMVC.Data.Entities.User> _userManager

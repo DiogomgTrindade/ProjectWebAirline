@@ -1,4 +1,7 @@
 ﻿@model ProjectWebAirlineMVC.Models.ChangeUserRoleViewModel
+@{
+    ViewData["Title"] = "ChangeUserRole";
+}
 
 <h2>Change @Model.FullName Role</h2>
 
@@ -6,9 +9,10 @@
     <input type="hidden" name="userId" value="@Model.UserId" />
 
     <div class="form-group">
-        <label asp-for="CurrentRole" class="control-label">Select new role</label>
+        <label asp-for="CurrentRole" class="control-label">Select role</label>
         <select asp-for="CurrentRole" class="form-control" asp-items="Model.Roles"></select>
     </div>
 
     <button type="submit" class="btn btn-primary">Switch role</button>
+    <a asp-action="UsersListWithRoles" class="btn btn-dark"><i class="fa-solid fa-user"></i> List</a> 
 </form>

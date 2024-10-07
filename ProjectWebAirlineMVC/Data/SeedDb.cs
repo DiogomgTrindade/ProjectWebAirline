@@ -31,10 +31,14 @@ namespace ProjectWebAirlineMVC.Data
             await _userHelper.CheckRolesAsync("Worker");
 
 
-            AddCountry("Portugal");
-            AddCountry("Espanha");
-            AddCountry("Alemanha");
-            AddCountry("França");
+            if (!_context.Countries.Any())
+            {
+
+                AddCountry("Portugal");
+                AddCountry("Espanha");
+                AddCountry("Alemanha");
+                AddCountry("França");
+            }
 
 
 
@@ -54,7 +58,8 @@ namespace ProjectWebAirlineMVC.Data
                 var result = await _userHelper.AddUserAsync(user, "123456");
                 if (result != IdentityResult.Success)
                 {
-                    throw new InvalidOperationException("Could not create the user in seeder");
+                    var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                    throw new InvalidOperationException($"Could not create the user in seeder. Errors: {errors}");
                 };
 
 
@@ -75,8 +80,9 @@ namespace ProjectWebAirlineMVC.Data
                 AddAircraft("Airbus A310", user);
                 AddAircraft("Cessna 120", user);
                 AddAircraft("Saab 2000", user);
-                await _context.SaveChangesAsync();
             }
+
+            await _context.SaveChangesAsync();
         }
 
 

@@ -27,7 +27,14 @@
         <img src="@Url.Content(Model.ImageFullPath)" alt="Image" style="width:400px;height:350px;max-width:100%;height:auto">
     </div>
 </div>
-    
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    </div>
+}
+
     <br />
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
