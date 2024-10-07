@@ -6,9 +6,7 @@
     <title>@ViewData["Title"] - ProjectWebAirlineMVC</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
-
     <link rel="stylesheet" href="~/css/site.css" />
-
 </head>
 <body>
     <header>
@@ -50,29 +48,33 @@
                             var user = await _userManager.GetUserAsync(User);
                             if (user != null)
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangeUser">@user.FullName</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@user.FullName</a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangeUser">Change username</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change password</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
+                                    </ul>
                                 </li>
                             }
                             else
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangeUser">@User.Identity.Name</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@this.User.Identity.Name</a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangeUser">Change User</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
+                                    </ul>
                                 </li>
 
                             }
-                            
+
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login"><i class="fa-solid fa-arrow-right-to-bracket"></i> Login</a>
                             </li>
                         }
                     </ul>

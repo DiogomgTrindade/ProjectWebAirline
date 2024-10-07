@@ -40,7 +40,7 @@ namespace ProjectWebAirlineMVC.Models
         public DateTime Date { get; set; } = DateTime.Now;
 
 
-
+        [Required]
         [Display(Name = "Aircraft")]
         public int AircraftId { get; set; }
         public Aircraft Aircraft { get; set; }

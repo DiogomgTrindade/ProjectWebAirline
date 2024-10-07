@@ -41,7 +41,7 @@ namespace ProjectWebAirlineMVC.Controllers
 
 
         // GET: Aircraft
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View(_aircraftRepository.GetAll().OrderBy(a => a.Name));
         }
