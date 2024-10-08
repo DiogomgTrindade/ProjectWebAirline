@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Data.Interfaces;
-using ProjectWebAirlineMVC.Data.Repositories;
 using ProjectWebAirlineMVC.Helpers;
 using ProjectWebAirlineMVC.Models;
 using NotFoundViewResult = ProjectWebAirlineMVC.Helpers.NotFoundViewResult;

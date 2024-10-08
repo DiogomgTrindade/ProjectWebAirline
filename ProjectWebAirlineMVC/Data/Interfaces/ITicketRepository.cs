@@ -1,8 +1,7 @@
 ﻿using ProjectWebAirlineMVC.Data.Entities;
-using ProjectWebAirlineMVC.Data.Interfaces;
 using System.Threading.Tasks;
 
-namespace ProjectWebAirlineMVC.Data.Repositories
+namespace ProjectWebAirlineMVC.Data.Interfaces
 {
     public interface ITicketRepository : IGenericRepository<Tickets>
     {

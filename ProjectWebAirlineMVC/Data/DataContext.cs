@@ -27,13 +27,12 @@ namespace ProjectWebAirlineMVC.Data
                 .IsUnique();
 
 
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<Flight>()
                 .HasOne(f => f.Aircraft)
                 .WithMany()
                 .HasForeignKey(f => f.AircraftId)
                 .OnDelete(DeleteBehavior.Restrict);
+
 
             modelBuilder.Entity<Flight>()
                 .HasOne(f => f.OriginCountry)
@@ -41,17 +40,28 @@ namespace ProjectWebAirlineMVC.Data
                 .HasForeignKey(f => f.OriginCountryId)
                 .OnDelete(DeleteBehavior.Restrict); 
 
+
             modelBuilder.Entity<Flight>()
                 .HasOne(f => f.DestinationCountry)
                 .WithMany() 
                 .HasForeignKey(f => f.DestinationCountryId)
                 .OnDelete(DeleteBehavior.Restrict);  
 
+
             modelBuilder.Entity<Tickets>()
                 .HasOne(t => t.Flight)
                 .WithMany(f => f.TicketList)
                 .HasForeignKey(t => t.FlightId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Tickets>()
+                .HasOne(t => t.Passenger)
+                .WithMany(u => u.TicketList)
+                .HasForeignKey(t => t.PassengerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            base.OnModelCreating(modelBuilder);
         }
 
     }

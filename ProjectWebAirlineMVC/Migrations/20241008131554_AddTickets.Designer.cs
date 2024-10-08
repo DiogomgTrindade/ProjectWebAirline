@@ -10,7 +10,7 @@ using ProjectWebAirlineMVC.Data;
 namespace ProjectWebAirlineMVC.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241007105135_AddTickets")]
+    [Migration("20241008131554_AddTickets")]
     partial class AddTickets
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -440,8 +440,9 @@ namespace ProjectWebAirlineMVC.Migrations
                         .IsRequired();
 
                     b.HasOne("ProjectWebAirlineMVC.Data.Entities.User", "Passenger")
-                        .WithMany()
-                        .HasForeignKey("PassengerId");
+                        .WithMany("TicketList")
+                        .HasForeignKey("PassengerId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Flight");
 
@@ -449,6 +450,11 @@ namespace ProjectWebAirlineMVC.Migrations
                 });
 
             modelBuilder.Entity("ProjectWebAirlineMVC.Data.Entities.Flight", b =>
+                {
+                    b.Navigation("TicketList");
+                });
+
+            modelBuilder.Entity("ProjectWebAirlineMVC.Data.Entities.User", b =>
                 {
                     b.Navigation("TicketList");
                 });

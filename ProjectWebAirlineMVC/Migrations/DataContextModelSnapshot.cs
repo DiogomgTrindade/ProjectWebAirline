@@ -438,8 +438,9 @@ namespace ProjectWebAirlineMVC.Migrations
                         .IsRequired();
 
                     b.HasOne("ProjectWebAirlineMVC.Data.Entities.User", "Passenger")
-                        .WithMany()
-                        .HasForeignKey("PassengerId");
+                        .WithMany("TicketList")
+                        .HasForeignKey("PassengerId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Flight");
 
@@ -447,6 +448,11 @@ namespace ProjectWebAirlineMVC.Migrations
                 });
 
             modelBuilder.Entity("ProjectWebAirlineMVC.Data.Entities.Flight", b =>
+                {
+                    b.Navigation("TicketList");
+                });
+
+            modelBuilder.Entity("ProjectWebAirlineMVC.Data.Entities.User", b =>
                 {
                     b.Navigation("TicketList");
                 });

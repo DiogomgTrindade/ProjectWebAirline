@@ -1,0 +1,65 @@
+﻿@model ProjectWebAirlineMVC.Data.Entities.Tickets
+
+@{
+    ViewData["Title"] = "Ticket Details";
+}
+
+<h1>Ticket Details</h1>
+
+<div>
+    <h4>Flight Information</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Flight Number
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Flight.FlightNumber)
+        </dd>
+
+        <dt class="col-sm-2">
+            Aircraft
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Flight.Aircraft.Name)
+        </dd>
+
+        <dt class="col-sm-2">
+            Origin
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Flight.OriginCountry.Name)
+        </dd>
+
+        <dt class="col-sm-2">
+            Destination
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Flight.DestinationCountry.Name)
+        </dd>
+
+        <dt class="col-sm-2">
+            Date
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Flight.Date)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <h4>Ticket Information</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Seat
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Seat)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Index">Back to ticket list</a>
+</div>

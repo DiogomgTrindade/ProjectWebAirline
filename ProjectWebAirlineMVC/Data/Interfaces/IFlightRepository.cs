@@ -9,15 +9,8 @@ namespace ProjectWebAirlineMVC.Data.Interfaces
 {
     public interface IFlightRepository : IGenericRepository<Flight>
     {
-        public IQueryable GetAllWithUsersAndAircrafts();
-
-
-        Task<Flight> GetByIdWithUsersAndAircraftsAsync(int id);
 
         Task<IEnumerable<Flight>> GetAllFlightsWithCountriesAsync();
-
-        Task<Flight> GetByIdWithCountries(int id);
-
 
         public IQueryable GetAllWithCountriesAndAircrafts();
 

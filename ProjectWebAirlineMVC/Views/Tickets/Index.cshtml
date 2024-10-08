@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ProjectWebAirlineMVC.Data.Entities.Tickets>
+
+@{
+    ViewData["Title"] = "Your Tickets";
+}
+
+<h1>Your Tickets</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Flight Number</th>
+            <th>Date</th>
+            <th>Aircraft</th>
+            <th>Origin</th>
+            <th>Destination</th>
+            <th>Seat</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Flight.FlightNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Flight.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Flight.Aircraft.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Flight.OriginCountry.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Flight.DestinationCountry.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Seat)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

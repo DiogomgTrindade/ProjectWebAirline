@@ -1,0 +1,30 @@
+﻿@model ProjectWebAirlineMVC.Models.TicketListViewModel
+
+@{
+    ViewData["Title"] = "Available Tickets for Flight " + Model.Flight.FlightNumber;
+}
+
+<h2>Available Tickets for Flight @Model.Flight.FlightNumber</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Seat Number</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in Model.AvailableTickets)
+        {
+            <tr>
+                <td>@ticket.Seat</td>
+                <td>
+                    <form asp-action="BuyTickets" method="post">
+                        <input type="hidden" name="ticketId" value="@ticket.Id" />
+                        <button type="submit" class="btn btn-primary">Buy</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

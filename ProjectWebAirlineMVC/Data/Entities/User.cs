@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System;
 using System.Security.Principal;
+using System.Collections.Generic;
 
 namespace ProjectWebAirlineMVC.Data.Entities
 {
@@ -13,7 +14,7 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
         public string FullName => $"{FirstName} {LastName}";
 
-
+        public List<Tickets> TicketList { get; set; } = new List<Tickets>();
 
         //[Display(Name = "Image")]
         //public Guid ImageId { get; set; }
