@@ -1,30 +1,54 @@
-﻿@model ProjectWebAirlineMVC.Models.TicketListViewModel
+﻿@model ProjectWebAirlineMVC.Models.TicketPurchaseViewModel
 
-@{
-    ViewData["Title"] = "Available Tickets for Flight " + Model.Flight.FlightNumber;
-}
+<h2>Buy Ticket for Flight @Model.Flight?.FlightNumber</h2>
 
-<h2>Available Tickets for Flight @Model.Flight.FlightNumber</h2>
+<form asp-action="BuyTickets" method="post">
+    <input type="hidden" asp-for="FlightId" value="@Model.Flight.Id" />
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Seat Number</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var ticket in Model.AvailableTickets)
-        {
-            <tr>
-                <td>@ticket.Seat</td>
-                <td>
-                    <form asp-action="BuyTickets" method="post">
-                        <input type="hidden" name="ticketId" value="@ticket.Id" />
-                        <button type="submit" class="btn btn-primary">Buy</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="form-group">
+        <label asp-for="SelectedSeat">Seat</label>
+        <select asp-for="SelectedSeat" class="form-control" asp-items="Model.AvailableSeats">
+            <option value="">Select your seat</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PassengerFirstName">First Name</label>
+        <input asp-for="PassengerFirstName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PassengerLastName">Last Name</label>
+        <input asp-for="PassengerLastName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PassengerPhoneNumber">Phone Number</label>
+        <input asp-for="PassengerPhoneNumber" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PassengerEmail">Email</label>
+        <input asp-for="PassengerEmail" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Add Luggage?</label>
+        <div>
+            <input type="radio" asp-for="HasLuggage" value="true" /> Yes
+            <input type="radio" asp-for="HasLuggage" value="false" /> No
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Extra Luggage?</label>
+        <div>
+            <input type="radio" asp-for="ExtraLuggage" value="true" /> Yes
+            <input type="radio" asp-for="ExtraLuggage" value="false" /> No
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Buy</button>
+    <a asp-area="" asp-controller="Flights" asp-action="Index" class="btn btn-dark">Back to Flights</a>
+
+</form>

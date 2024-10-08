@@ -10,7 +10,7 @@ using ProjectWebAirlineMVC.Data;
 namespace ProjectWebAirlineMVC.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241008131554_AddTickets")]
+    [Migration("20241008161821_AddTickets")]
     partial class AddTickets
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -246,14 +246,32 @@ namespace ProjectWebAirlineMVC.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("ExtraLuggage")
+                        .HasColumnType("bit");
+
                     b.Property<int>("FlightId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("HasLuggage")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
+                    b.Property<string>("PassengerEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PassengerFirstName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PassengerId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PassengerLastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PassengerPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Seat")
                         .HasColumnType("nvarchar(max)");

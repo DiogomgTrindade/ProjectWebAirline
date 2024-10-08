@@ -44,6 +44,13 @@ namespace ProjectWebAirlineMVC.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<Tickets>> GetTicketsByFlightIdAsync(int flightId)
+        {
+            return await _context.Tickets
+                                 .Where(t => t.FlightId == flightId && t.IsAvailable)
+                                 .ToListAsync();
+        }
+
         public async Task RemoveTicketsFromFlightAsync(Flight flight)
         {
             var tickets = await _context.Tickets

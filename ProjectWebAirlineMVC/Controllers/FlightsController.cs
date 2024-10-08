@@ -77,13 +77,13 @@ namespace ProjectWebAirlineMVC.Controllers
                 {
                     Value = country.Id.ToString(),
                     Text = country.Name
-                }).ToList(),
+                }).ToList().OrderBy(c => c.Text),
 
                 Aircrafts = aircrafts.Select(aircraft => new SelectListItem
                 {
                     Value = aircraft.Id.ToString(),
                     Text = aircraft.Name
-                }).ToList()
+                }).ToList().OrderBy(a => a.Text)
 
             };
 

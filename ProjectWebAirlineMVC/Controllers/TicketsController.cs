@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,9 +12,11 @@ using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Data.Interfaces;
 using ProjectWebAirlineMVC.Helpers;
 using ProjectWebAirlineMVC.Models;
+using NotFoundViewResult = ProjectWebAirlineMVC.Helpers.NotFoundViewResult;
 
 namespace ProjectWebAirlineMVC.Controllers
 {
+    [Authorize]
     public class TicketsController : Controller
     {
         private readonly ITicketRepository _ticketsRepository;
@@ -34,7 +37,7 @@ namespace ProjectWebAirlineMVC.Controllers
 
             if (user == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("TicketListNotFound");
             }
 
             var tickets = await _ticketsRepository.GetAll()
@@ -52,7 +55,8 @@ namespace ProjectWebAirlineMVC.Controllers
 
         public async Task<IActionResult> TicketList(int flightId)
         {
-            var flight = await _flightRepository.GetByIdAsync(flightId);
+            var flights = await _flightRepository.GetAllFlightsWithCountriesAndAircraftAsync();
+            var flight = flights.FirstOrDefault(f => f.Id == flightId);
             if (flight == null)
             {
                 return NotFound();
@@ -67,34 +71,54 @@ namespace ProjectWebAirlineMVC.Controllers
                 return NotFound();
             }
 
-            var model = new TicketListViewModel
+            var seatOptions = availableTickets.OrderBy(t => int.Parse(new string(t.Seat.Where(char.IsDigit).ToArray())))
+                .Select(t => new SelectListItem
+            {
+                Value = t.Seat,
+                Text = t.Seat
+            }).ToList();
+
+            var model = new TicketPurchaseViewModel
             {
                 Flight = flight,
-                AvailableTickets = availableTickets
+                AvailableSeats = seatOptions
             };
 
             return View(model);
         }
 
+
+
         [HttpPost]
-        public async Task<IActionResult> BuyTickets(int ticketId)
+        public async Task<IActionResult> BuyTickets(TicketPurchaseViewModel model)
         {
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return NotFound();
             }
 
-            var ticket = await _ticketsRepository.GetByIdAsync(ticketId);
+            var availableTickets = await _ticketsRepository.GetTicketsByFlightIdAsync(model.FlightId);
+            var ticket = availableTickets.FirstOrDefault(t => t.Seat == model.SelectedSeat);
+
             if (ticket == null || !ticket.IsAvailable)
             {
                 return NotFound();
             }
 
+            
             ticket.PassengerId = user.Id;
             ticket.IsAvailable = false;
+            ticket.PassengerFirstName = model.PassengerFirstName;
+            ticket.PassengerLastName = model.PassengerLastName;
+            ticket.PassengerPhoneNumber = model.PassengerPhoneNumber;
+            ticket.PassengerEmail = model.PassengerEmail;
+            ticket.HasLuggage = model.HasLuggage;
+            ticket.ExtraLuggage = model.ExtraLuggage;
 
             await _ticketsRepository.UpdateAsync(ticket);
+
             return RedirectToAction(nameof(Index));
         }
 

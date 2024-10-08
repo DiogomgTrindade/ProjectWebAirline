@@ -6,6 +6,7 @@
 
 <h1>Ticket Details</h1>
 
+
 <div>
     <h4>Flight Information</h4>
     <hr />
@@ -47,6 +48,7 @@
     </dl>
 </div>
 
+
 <div>
     <h4>Ticket Information</h4>
     <hr />
@@ -57,8 +59,59 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Seat)
         </dd>
+
+
+        <dt class="col-sm-2">
+             Full Name
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PassengerFirstName) @Html.DisplayFor(model => model.PassengerLastName)
+        </dd>
+
+        <dt class="col-sm-2">
+            Phone Number
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PassengerPhoneNumber)
+        </dd>
+
+        <dt class="col-sm-2">
+            Email
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PassengerEmail)
+        </dd>
+
+        <dt class="col-sm-2">
+            Luggage
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.HasLuggage)
+            {
+                @Html.Raw("Yes")
+            }
+            else
+            {
+                @Html.Raw("No")
+            }
+        </dd>
+
+        <dt class="col-sm-2">
+            Extra Luggage
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.ExtraLuggage)
+            {
+                @Html.Raw("Yes")
+            }
+            else
+            {
+                @Html.Raw("No")
+            }
+        </dd>
     </dl>
 </div>
+
 
 <div>
     <a asp-action="Index">Back to ticket list</a>

@@ -15,7 +15,13 @@ namespace ProjectWebAirlineMVC.Migrations
                     FlightId = table.Column<int>(type: "int", nullable: false),
                     Seat = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false),
-                    PassengerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    PassengerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    PassengerFirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PassengerLastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PassengerPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PassengerEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HasLuggage = table.Column<bool>(type: "bit", nullable: false),
+                    ExtraLuggage = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

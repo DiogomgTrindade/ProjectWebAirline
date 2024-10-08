@@ -16,7 +16,6 @@ namespace ProjectWebAirlineMVC.Data.Interfaces
 
         Task<IEnumerable<Flight>> GetAllFlightsWithCountriesAndAircraftAsync();
 
-
     }
 }
 
