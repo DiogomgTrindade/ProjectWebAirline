@@ -28,7 +28,7 @@ namespace ProjectWebAirlineMVC.Data
 
             await _userHelper.CheckRolesAsync("Admin");
             await _userHelper.CheckRolesAsync("Customer");
-            await _userHelper.CheckRolesAsync("Worker");
+            await _userHelper.CheckRolesAsync("Employee");
 
 
             if (!_context.Countries.Any())

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using ProjectWebAirlineMVC.Data.Entities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace ProjectWebAirlineMVC.Data.Interfaces
         public IQueryable GetAllWithCountriesAndAircrafts();
 
         Task<IEnumerable<Flight>> GetAllFlightsWithCountriesAndAircraftAsync();
+
+        Task<bool> CheckIfAircraftIsBookedForDateAsync(int aicraftId, DateTime date, int? flightId = null);
 
     }
 }

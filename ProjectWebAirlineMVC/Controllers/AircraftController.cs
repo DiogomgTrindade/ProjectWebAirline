@@ -21,6 +21,7 @@ namespace ProjectWebAirlineMVC.Controllers
         private readonly DataContext _context;
         private readonly IAircraftRepository _aircraftRepository;
         private readonly ITicketRepository _ticketRepository;
+        private readonly IFlightRepository _flightRepository;
         private readonly IUserHelper _userHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
@@ -29,6 +30,7 @@ namespace ProjectWebAirlineMVC.Controllers
         public AircraftController(DataContext context,
             IAircraftRepository aircraftRepository,
             ITicketRepository ticketRepository,
+            IFlightRepository flightRepository,
             IUserHelper userHelper,
             IBlobHelper blobHelper,
             IConverterHelper converterHelper)
@@ -36,6 +38,7 @@ namespace ProjectWebAirlineMVC.Controllers
             _context = context;
             _aircraftRepository = aircraftRepository;
             _ticketRepository = ticketRepository;
+            _flightRepository = flightRepository;
             _userHelper = userHelper;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
@@ -133,6 +136,20 @@ namespace ProjectWebAirlineMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(AircraftViewModel model)
         {
+            var associatedFlights1 = await _flightRepository.GetAll()
+                .Where(f => f.AircraftId == model.Id)
+                .ToListAsync();
+
+            var tickets1 = await _ticketRepository.GetAll()
+                .Where(t => associatedFlights1.Select(f => f.Id).Contains(t.FlightId) && t.IsAvailable == false)
+                .ToListAsync();
+
+            if (tickets1.Any())
+            {
+                ModelState.AddModelError(string.Empty, "This plane cannot be edited because tickets have already been purchased for flights that use it.");
+                return View(model);
+            }
+
             if (ModelState.IsValid)
             {
                 try

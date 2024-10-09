@@ -47,15 +47,28 @@
     </div>
 </div>
 
-<div class="text-success">
+@* <div class="text-success">
     <p>
         @ViewBag.Message
     </p>
-</div>
+</div> *@
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
 
+    @if (ViewBag.EmailSent != null && ViewBag.EmailSent == true)
+        {
+            <script>
+                Swal.fire({
+                        title: 'Success!',
+                        text: 'We sent you an email confirmation. Please confirm your email.',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '@Url.Action("Login", "Account")';
+                        }
+                    });
+                </script>
+
+        }
+}

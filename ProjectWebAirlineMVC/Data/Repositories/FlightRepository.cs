@@ -57,5 +57,12 @@ namespace ProjectWebAirlineMVC.Data.Repositories
                 .OrderBy(f => f.Date);
         }
 
+        public async Task<bool> CheckIfAircraftIsBookedForDateAsync(int aicraftId, DateTime date, int? flightId = null)
+        {
+            return await _context.Flights
+                        .AnyAsync(f => f.AircraftId == aicraftId 
+                        && f.Date.Date == date.Date 
+                        && (flightId == null || f.Id != flightId));   
+        }
     }
 }

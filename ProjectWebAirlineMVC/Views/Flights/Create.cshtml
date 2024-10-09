@@ -4,18 +4,19 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create new Flight</h1>
+<h1>New Flight</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" id="flightForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <partial name="_Flights"/>
-
+            <partial name="_Flights" />
 
             <div class="form-group">
+                <span id="error-message" class="text-danger" style="display:none;">We only do International Flights, select a different country</span>
+                <br />
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -30,4 +31,24 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        document.getElementById('flightForm').addEventListener('submit', function (e) {
+            
+            var originCountryId = document.getElementById('OriginCountryId').value;
+            var destinationCountryId = document.getElementById('DestinationCountryId').value;
+
+            
+            if (originCountryId === destinationCountryId) {
+                
+                document.getElementById('error-message').style.display = 'block';
+
+                
+                e.preventDefault();
+            } else {
+                
+                document.getElementById('error-message').style.display = 'none';
+            }
+        });
+    </script>
 }

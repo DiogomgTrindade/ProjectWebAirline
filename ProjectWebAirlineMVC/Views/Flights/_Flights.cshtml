@@ -1,22 +1,21 @@
 ﻿@model ProjectWebAirlineMVC.Models.FlightViewModel
 
-
-
 <div class="form-group">
     <label asp-for="Date" class="control-label"></label>
-    <input asp-for="Date" class="form-control" />
+    <input asp-for="Date" class="form-control" type="datetime-local"
+           min="@(DateTime.Now.ToString("yyyy-MM-ddTHH:mm"))" />
     <span asp-validation-for="Date" class="text-danger"></span>
 </div>
 
 <div class="form-group">
     <label asp-for="OriginCountryId" class="control-label"></label>
-    <select asp-for="OriginCountryId" class="form-control" asp-items="Model.Countries"></select>
+    <select asp-for="OriginCountryId" class="form-control" asp-items="Model.Countries" id="OriginCountryId"></select>
     <span asp-validation-for="OriginCountryId" class="text-danger"></span>
 </div>
 
 <div class="form-group">
     <label asp-for="DestinationCountryId" class="control-label"></label>
-    <select asp-for="DestinationCountryId" class="form-control" asp-items="Model.Countries"></select>
+    <select asp-for="DestinationCountryId" class="form-control" asp-items="Model.Countries" id="DestinationCountryId"></select>
     <span asp-validation-for="DestinationCountryId" class="text-danger"></span>
 </div>
 

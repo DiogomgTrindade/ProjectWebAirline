@@ -13,5 +13,7 @@ namespace ProjectWebAirlineMVC.Data.Interfaces
 
         Task<List<Country>> GetCountryListAsync();
 
+        Task<bool> CountryNameExistsAsync(string name, int? id = null);
+
     }
 }

@@ -65,6 +65,15 @@ namespace ProjectWebAirlineMVC.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                bool countryExists = await _countryRepository.CountryNameExistsAsync(model.Name);
+                if (countryExists)
+                {
+                    ModelState.AddModelError(string.Empty, "Country already created.");
+                    return View(model);
+                }
+
+
                 Guid imageId = Guid.Empty;
 
 
@@ -111,6 +120,15 @@ namespace ProjectWebAirlineMVC.Controllers
             {
                 try
                 {
+
+                    bool countryExists = await _countryRepository.CountryNameExistsAsync(model.Name);
+                    if (countryExists)
+                    {
+                        ModelState.AddModelError(string.Empty, "Country already created.");
+                        return View(model);
+                    }
+
+
                     Guid imageId = model.ImageId;
 
                     if(model.ImageFile != null && model.ImageFile.Length > 0)

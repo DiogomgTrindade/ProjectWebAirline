@@ -116,14 +116,15 @@ namespace ProjectWebAirlineMVC.Controllers
 
                     }, protocol: HttpContext.Request.Scheme);
 
-                    Helpers.Response response = _mailHelper.SendEmail(model.EmailAddress, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                        $"To confirm your email, please click on the link</br>" +
-                        $"<a href= \"{tokenLink}\">Confirm your Email</a>");
+                    Helpers.Response response = _mailHelper.SendEmail(model.EmailAddress, "Verify Your Email Adress", $"<h1>Verify Your Email Adress</h1>" +
+                        $"To finish setting up your account, we need to make sure that this email address is yours.</br>" +
+                        $"<a href= \"{tokenLink}\">Confirm here your email</a>");
 
 
                     if (response.IsSucces)
                     {
-                        ViewBag.Message = "The instructions to confirm your e-mail has been sent.";
+                        ViewBag.EmailSent = true;
+                        //ViewBag.Message = "The instructions to confirm your e-mail has been sent.";
                         return View(model);
                     }
 
@@ -355,14 +356,14 @@ namespace ProjectWebAirlineMVC.Controllers
                     "Account",
                     new { token = myToken }, protocol: HttpContext.Request.Scheme);
 
-                Response response = _mailHelper.SendEmail(model.Email, "Reset your password",
-                     $"<h1>Your password has been reseted</br>" +
-                    $"To reset your password click in this link:</br></br>" +
-                    $"<a href = \"{link}\">  reset Password</a>");
+                Response response = _mailHelper.SendEmail(model.Email, "Reset Your Password",
+                     $"<h1>Your password has been reseted.</br>" +
+                    $"Click the following link to Reset your Password </br></br>" +
+                    $"<a href = \"{link}\"> Reset Your Password Here</a>");
 
                 if (response.IsSucces)
                 {
-                    this.ViewBag.Message = "The instructions to recover your password has been sent to your email.";
+                    ViewBag.EmailSent = true;
                 }
             }
 

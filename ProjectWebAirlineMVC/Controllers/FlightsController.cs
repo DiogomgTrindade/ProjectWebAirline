@@ -23,8 +23,9 @@ namespace ProjectWebAirlineMVC.Controllers
         private readonly IUserHelper _userHelper;
         private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
+        private readonly IMailHelper _mailHelper;
 
-        public FlightsController(IFlightRepository flightRepository, ICountryRepository countryRepository, IUserHelper userHelper, IBlobHelper blobHelper, IConverterHelper converterHelper, IAircraftRepository aircraftRepository, ITicketRepository ticketRepository)
+        public FlightsController(IFlightRepository flightRepository, ICountryRepository countryRepository, IUserHelper userHelper, IBlobHelper blobHelper, IConverterHelper converterHelper, IAircraftRepository aircraftRepository, ITicketRepository ticketRepository, IMailHelper mailHelper)
         {
             _flightRepository = flightRepository;
             _countryRepository = countryRepository;
@@ -33,6 +34,7 @@ namespace ProjectWebAirlineMVC.Controllers
             _userHelper = userHelper;
             _blobHelper = blobHelper;
             _converterHelper = converterHelper;
+            _mailHelper = mailHelper;
         }
 
         // GET: Flights
@@ -99,6 +101,29 @@ namespace ProjectWebAirlineMVC.Controllers
 
             if (ModelState.IsValid)
             {
+
+                bool isAircraftBooked = await _flightRepository.CheckIfAircraftIsBookedForDateAsync(model.AircraftId, model.Date);
+                if (isAircraftBooked)
+                {
+                    ModelState.AddModelError(string.Empty, "This aircraft is already booked, please switch the date or switch the airplane.");
+                    var countries1 = await _countryRepository.GetCountryListAsync();
+                    model.Countries = countries1.Select(country => new SelectListItem
+                    {
+                        Value = country.Id.ToString(),
+                        Text = country.Name
+                    }).ToList().OrderBy(c => c.Text);
+
+                    var aircrafts1 = await _aircraftRepository.GetAircraftListAsync();
+                    model.Aircrafts = aircrafts1.Select(aircraft => new SelectListItem
+                    {
+                        Value = aircraft.Id.ToString(),
+                        Text = aircraft.Name
+                    }).ToList().OrderBy(a => a.Text);
+
+                    return View(model);
+                }
+
+
                 var aircraft = await _aircraftRepository.GetByIdAsync(model.AircraftId);
                 if (aircraft == null)
                 {
@@ -166,14 +191,14 @@ namespace ProjectWebAirlineMVC.Controllers
             {
                 Value = country.Id.ToString(),
                 Text = country.Name
-            });
+            }).OrderBy(t => t.Text);
 
             var aircrafts = await _aircraftRepository.GetAircraftListAsync();
             model.Aircrafts = aircrafts.Select(aircraft => new SelectListItem
             {
                 Value = aircraft.Id.ToString(),
                 Text = aircraft.Name
-            });
+            }).OrderBy(t => t.Text);
 
             return View(model);
         }
@@ -185,12 +210,49 @@ namespace ProjectWebAirlineMVC.Controllers
         {
             if (ModelState.IsValid)
             {
+                var existingFlight1 = await _flightRepository.GetByIdAsync(model.Id);
+                if (existingFlight1 == null)
+                {
+                    return new NotFoundViewResult("FlightNotFound");
+                }
+
+                var tickets1 = await _ticketRepository.GetAll()
+                    .Where(t => t.FlightId == existingFlight1.Id && t.IsAvailable == false)
+                    .ToListAsync();
+
+                if (tickets1.Any())
+                {
+                    ModelState.AddModelError(string.Empty, "This flight cannot be edited because one or more tickets have already been purchased.");
+                    return View(model);
+                }
+
                 try
                 {
                     var existingFlight = await _flightRepository.GetByIdAsync(model.Id);
                     if (existingFlight == null)
                     {
                         return new NotFoundViewResult("FlightNotFound");
+                    }
+
+                    bool isAircraftBooked = await _flightRepository.CheckIfAircraftIsBookedForDateAsync(model.AircraftId, model.Date);
+                    if (isAircraftBooked)
+                    {
+                        ModelState.AddModelError(string.Empty, "This aircraft is already booked, please switch the date or switch the airplane.");
+                        var countries1 = await _countryRepository.GetCountryListAsync();
+                        model.Countries = countries1.Select(country => new SelectListItem
+                        {
+                            Value = country.Id.ToString(),
+                            Text = country.Name
+                        }).ToList().OrderBy(c => c.Text);
+
+                        var aircrafts1 = await _aircraftRepository.GetAircraftListAsync();
+                        model.Aircrafts = aircrafts1.Select(aircraft => new SelectListItem
+                        {
+                            Value = aircraft.Id.ToString(),
+                            Text = aircraft.Name
+                        }).ToList().OrderBy(a => a.Text);
+
+                        return View(model);
                     }
 
                     bool isAircraftChanged = existingFlight.AircraftId != model.AircraftId;
@@ -275,9 +337,30 @@ namespace ProjectWebAirlineMVC.Controllers
                 return new NotFoundViewResult("FlightNotFound");
             }
 
+            var tickets = await _ticketRepository.GetAll()
+                .Where(t => t.FlightId == flight.Id)
+                .ToListAsync();
+
+            if (tickets.Any())
+            {
+                foreach (var ticket in tickets)
+                {
+                    var passengerEmail = ticket.PassengerEmail;
+                    if (!string.IsNullOrWhiteSpace(passengerEmail))
+                    {
+                        string subject = "Flight canceled";
+                        string body = $"Dear passenger {ticket.PassengerFirstName} {ticket.PassengerLastName}, the flight {flight.FlightNumber} from {flight.OriginCountry} to {flight.DestinationCountry} scheduled for {flight.Date.ToString()} has been cancelled. Please get in touch for more information.</br>" +
+                            $"With best regards.";
+                        _mailHelper.SendEmail(passengerEmail, subject, body);
+                    }
+                }
+            }
+
             await _ticketRepository.RemoveTicketsFromFlightAsync(flight);
 
             await _flightRepository.DeleteAsync(flight);
+
+            
 
             return RedirectToAction(nameof(Index));
         }

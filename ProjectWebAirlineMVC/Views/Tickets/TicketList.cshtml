@@ -1,5 +1,6 @@
 ﻿@model ProjectWebAirlineMVC.Models.TicketPurchaseViewModel
 
+
 <h2>Buy Ticket for Flight @Model.Flight?.FlightNumber</h2>
 
 <form asp-action="BuyTickets" method="post">
@@ -52,3 +53,6 @@
     <a asp-area="" asp-controller="Flights" asp-action="Index" class="btn btn-dark">Back to Flights</a>
 
 </form>
+
+
+

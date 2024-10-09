@@ -17,6 +17,12 @@ namespace ProjectWebAirlineMVC.Data.Repositories
             _context = context;
         }
 
+        public async Task<bool> CountryNameExistsAsync(string name, int? id = null)
+        {
+            return await _context.Countries
+                         .AnyAsync(c => c.Name.ToLower() == name.ToLower() && (!id.HasValue || c.Id != id.Value));
+        }
+
         public IEnumerable<SelectListItem> GetComboCountries()
         {
             var list = _context.Countries.Select(c => new SelectListItem

@@ -22,12 +22,14 @@ namespace ProjectWebAirlineMVC.Controllers
         private readonly ITicketRepository _ticketsRepository;
         private readonly IFlightRepository _flightRepository;
         private readonly UserManager<User> _userManager;
+        private readonly IMailHelper _mailHelper;
 
-        public TicketsController(ITicketRepository ticketsRepository, IFlightRepository flightRepository, UserManager<User> userManager)
+        public TicketsController(ITicketRepository ticketsRepository, IFlightRepository flightRepository, UserManager<User> userManager, IMailHelper mailHelper)
         {
             _ticketsRepository = ticketsRepository;
             _flightRepository = flightRepository;
             _userManager = userManager;
+            _mailHelper = mailHelper;
         }
 
         // GET: Tickets for the current logged-in user
@@ -68,7 +70,7 @@ namespace ProjectWebAirlineMVC.Controllers
 
             if (!availableTickets.Any())
             {
-                return NotFound();
+                return View("NoTicketsAvailable");
             }
 
             var seatOptions = availableTickets.OrderBy(t => int.Parse(new string(t.Seat.Where(char.IsDigit).ToArray())))
@@ -119,8 +121,10 @@ namespace ProjectWebAirlineMVC.Controllers
 
             await _ticketsRepository.UpdateAsync(ticket);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(PurchaseConfirmed));
         }
+
+
 
 
         // GET: Tickets/Details/5
@@ -148,6 +152,16 @@ namespace ProjectWebAirlineMVC.Controllers
             return View(ticket);
         }
 
+
+        public IActionResult PurchaseConfirmed()
+        {
+            return View();
+        }
+
+        public IActionResult NoTicketsAvailable()
+        {
+            return View();
+        }
 
     }
 }

@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Purchase Confirmation";
+}
+
+<style>
+    .confirmation-container {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .confirmation-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    .confirmation-message {
+        font-size: 1.5rem;
+        margin-bottom: 30px;
+        color: #27ae60;
+    }
+
+    .table {
+        margin: 0 auto;
+        width: 80%;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            text-align: center;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+        }
+
+        .table th {
+            background-color: #18bc9c;
+            color: white;
+        }
+
+    .btn-home {
+        margin-top: 30px;
+        padding: 10px 20px;
+        background-color: #18bc9c;
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+        .btn-home:hover {
+            background-color: #148f77;
+        }
+</style>
+
+<div class="confirmation-container">
+    <h1 class="confirmation-title">🎉 Flight Booked Successfully</h1>
+    <h4 class="confirmation-message">Thank you for your purchase!</h4>
+    <br />
+    <div>
+        <a class="btn-home" asp-controller="Home" asp-action="Index">Back to Home</a>
+        <a class="btn-home" asp-controller="Tickets" asp-action="Index">See your tickets</a>
+
+    </div>
+</div>

@@ -9,43 +9,67 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" id="flightForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <!-- Hidden fields for IDs -->
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="FlightNumber" />
 
-            <!-- Data do voo -->
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
+                <input asp-for="Date" class="form-control" type="datetime-local"
+                       min="@(DateTime.Now.ToString("yyyy-MM-ddTHH:mm"))" />
+                <span asp-validation-for="Date" class="text-danger"></span>
             </div>
 
-            <!-- País de origem -->
             <div class="form-group">
                 <label asp-for="OriginCountryId" class="control-label"></label>
-                <select asp-for="OriginCountryId" class="form-control" asp-items="Model.Countries"></select>
+                <select asp-for="OriginCountryId" class="form-control" asp-items="Model.Countries" id="OriginCountryId"></select>
             </div>
 
-            <!-- País de destino -->
             <div class="form-group">
                 <label asp-for="DestinationCountryId" class="control-label"></label>
-                <select asp-for="DestinationCountryId" class="form-control" asp-items="Model.Countries"></select>
+                <select asp-for="DestinationCountryId" class="form-control" asp-items="Model.Countries" id="DestinationCountryId"></select>
             </div>
 
-            <!-- Aeronave -->
             <div class="form-group">
                 <label asp-for="AircraftId" class="control-label"></label>
                 <select asp-for="AircraftId" class="form-control" asp-items="Model.Aircrafts"></select>
             </div>
 
             <div class="form-group">
+                <span id="error-message" class="text-danger" style="display:none;">We only do International Flights, select a different country</span>
+                <br />
                 <input type="submit" value="Save" class="btn btn-primary" />
                 <a asp-action="Index">Back to List</a>
             </div>
         </form>
-
     </div>
 </div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+        <script>
+            // Adiciona o evento de validação no formulário
+            document.getElementById('flightForm').addEventListener('submit', function (e) {
+                var originCountryId = document.getElementById('OriginCountryId').value;
+                var destinationCountryId = document.getElementById('DestinationCountryId').value;
+
+                // Verifica se o país de origem e destino são os mesmos
+                if (originCountryId === destinationCountryId) {
+                    // Exibe a mensagem de erro
+                    document.getElementById('error-message').style.display = 'block';
+                    // Impede o envio do formulário
+                    e.preventDefault();
+                } else {
+                    // Oculta a mensagem de erro se os países forem diferentes
+                    document.getElementById('error-message').style.display = 'none';
+                }
+            });
+        </script>
+    }
+    
 
