@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,9 @@ using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Data.Interfaces;
 using ProjectWebAirlineMVC.Helpers;
 using ProjectWebAirlineMVC.Models;
+using Syncfusion.Drawing;
+using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
 using NotFoundViewResult = ProjectWebAirlineMVC.Helpers.NotFoundViewResult;
 
 namespace ProjectWebAirlineMVC.Controllers
@@ -150,6 +154,54 @@ namespace ProjectWebAirlineMVC.Controllers
             }
 
             return View(ticket);
+        }
+
+        public async Task<IActionResult> DownloadPDF (int? id)
+        {
+            var ticket = await _ticketsRepository.GetAll()
+                                          .Include(t => t.Flight)
+                                             .ThenInclude(f => f.OriginCountry)
+                                          .Include(t => t.Flight)
+                                             .ThenInclude(f => f.DestinationCountry)
+                                          .Include(t => t.Flight)
+                                             .ThenInclude(f => f.Aircraft)
+                                          .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            using (PdfDocument document = new PdfDocument())
+            {
+                PdfPage page = document.Pages.Add();
+                PdfGraphics graphics = page.Graphics;
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 12);
+
+                graphics.DrawString("Ticket Details", font, PdfBrushes.Black, new PointF(0, 0));
+
+                graphics.DrawString("Flight Information", font, PdfBrushes.Black, new PointF(0, 40));
+                graphics.DrawString($"Flight Number: {ticket.Flight.FlightNumber}", font, PdfBrushes.Black, new PointF(0, 60));
+                graphics.DrawString($"Aircraft: {ticket.Flight.Aircraft.Name}", font, PdfBrushes.Black, new PointF(0, 80));
+                graphics.DrawString($"Origin: {ticket.Flight.OriginCountry.Name}", font, PdfBrushes.Black, new PointF(0, 100));
+                graphics.DrawString($"Destination: {ticket.Flight.DestinationCountry.Name}", font, PdfBrushes.Black, new PointF(0, 120));
+                graphics.DrawString($"Date: {ticket.Flight.Date.ToString("dd/MM/yyyy")}", font, PdfBrushes.Black, new PointF(0, 140));
+
+                graphics.DrawString("Ticket Information", font, PdfBrushes.Black, new PointF(0, 180));
+                graphics.DrawString($"Seat: {ticket.Seat}", font, PdfBrushes.Black, new PointF(0, 200));
+                graphics.DrawString($"Passenger: {ticket.PassengerFirstName} {ticket.PassengerLastName}", font, PdfBrushes.Black, new PointF(0, 220));
+                graphics.DrawString($"Phone: {ticket.PassengerPhoneNumber}", font, PdfBrushes.Black, new PointF(0, 240));
+                graphics.DrawString($"Email: {ticket.PassengerEmail}", font, PdfBrushes.Black, new PointF(0, 260));
+                graphics.DrawString($"Luggage: {(ticket.HasLuggage ? "Yes" : "No")}", font, PdfBrushes.Black, new PointF(0, 280));
+                graphics.DrawString($"Extra Luggage: {(ticket.ExtraLuggage ? "Yes" : "No")}", font, PdfBrushes.Black, new PointF(0, 300));
+
+                MemoryStream stream = new MemoryStream();
+                document.Save(stream);
+                stream.Position = 0;
+
+                return File(stream, "application/pdf", $"{ticket.PassengerFirstName}_{ticket.PassengerLastName}_Details.pdf");
+            }
+
         }
 
 

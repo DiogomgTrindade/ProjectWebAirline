@@ -101,7 +101,7 @@ namespace ProjectWebAirlineMVC
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBPh8sVXJzS0d+WFlPd19dX2ZWfFN0QXNQdVtyflFEcC0sT3RfQFliSX5Qd0VmUX5adH1TTw==");
+            SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBPh8sVXJzS0d+WFlPd19dX2ZWfFN0QXNQdVtyflFEcC0sT3RfQFliSX5Qd0VmUX5adH1TTw==");
 
             if (env.IsDevelopment())
             {
