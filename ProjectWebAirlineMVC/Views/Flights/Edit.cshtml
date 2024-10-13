@@ -53,19 +53,18 @@
     }
 
         <script>
-            // Adiciona o evento de validação no formulário
             document.getElementById('flightForm').addEventListener('submit', function (e) {
                 var originCountryId = document.getElementById('OriginCountryId').value;
                 var destinationCountryId = document.getElementById('DestinationCountryId').value;
 
-                // Verifica se o país de origem e destino são os mesmos
+
                 if (originCountryId === destinationCountryId) {
-                    // Exibe a mensagem de erro
+
                     document.getElementById('error-message').style.display = 'block';
-                    // Impede o envio do formulário
+
                     e.preventDefault();
                 } else {
-                    // Oculta a mensagem de erro se os países forem diferentes
+
                     document.getElementById('error-message').style.display = 'none';
                 }
             });

@@ -44,6 +44,19 @@ namespace ProjectWebAirlineMVC.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<Tickets>> GetTicketsByUserEmailAsync(string userEmail)
+        {
+            return await _context.Tickets
+                .Include(t => t.Flight)
+                    .ThenInclude(f => f.OriginCountry)
+                .Include(t => t.Flight)
+                    .ThenInclude(f => f.DestinationCountry)
+                .Include(t => t.Flight)
+                    .ThenInclude(f => f.Aircraft)
+                .Where(t => t.PassengerEmail == userEmail && t.Flight.Date > DateTime.Now)
+                .ToListAsync();
+        }
+
         public async Task<List<Tickets>> GetTicketsByFlightIdAsync(int flightId)
         {
             return await _context.Tickets

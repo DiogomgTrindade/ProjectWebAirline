@@ -326,6 +326,7 @@ namespace ProjectWebAirlineMVC.Controllers
             return View(flight);
         }
 
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -339,6 +340,10 @@ namespace ProjectWebAirlineMVC.Controllers
 
             var tickets = await _ticketRepository.GetAll()
                 .Where(t => t.FlightId == flight.Id)
+                .Include(t => t.Flight)
+                    .ThenInclude(f => f.OriginCountry)
+                .Include(t => t.Flight)
+                    .ThenInclude(f => f.DestinationCountry)
                 .ToListAsync();
 
             if (tickets.Any())
@@ -348,8 +353,12 @@ namespace ProjectWebAirlineMVC.Controllers
                     var passengerEmail = ticket.PassengerEmail;
                     if (!string.IsNullOrWhiteSpace(passengerEmail))
                     {
+                        string originCountry = ticket.Flight.OriginCountry.Name ?? "Indefinido";
+                        string destinationCountry = ticket.Flight.DestinationCountry.Name ?? "Indefinido";
+
+
                         string subject = "Flight canceled";
-                        string body = $"Dear passenger {ticket.PassengerFirstName} {ticket.PassengerLastName}, the flight {flight.FlightNumber} from {flight.OriginCountry} to {flight.DestinationCountry} scheduled for {flight.Date.ToString()} has been cancelled. Please get in touch for more information.</br>" +
+                        string body = $"Dear Passenger {ticket.PassengerFirstName} {ticket.PassengerLastName}, the Flight {flight.FlightNumber} From {originCountry} To {destinationCountry} Scheduled For {flight.Date.ToString()} Has Been Cancelled. Please Get In Touch For More Information.</br>" +
                             $"With best regards.";
                         _mailHelper.SendEmail(passengerEmail, subject, body);
                     }
@@ -360,7 +369,6 @@ namespace ProjectWebAirlineMVC.Controllers
 
             await _flightRepository.DeleteAsync(flight);
 
-            
 
             return RedirectToAction(nameof(Index));
         }

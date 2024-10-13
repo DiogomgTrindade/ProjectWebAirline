@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,63 +7,78 @@ using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Crypto.Modes;
 using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Data.Interfaces;
+using ProjectWebAirlineMVC.Data.Repositories;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ProjectWebAirlineMVC.Controllers.API
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TicketsController : ControllerBase
     {
         private readonly ITicketRepository _ticketRepository;
+        private readonly IFlightRepository _flightRepository;
         private readonly UserManager<User> _userManager;
 
 
-        public TicketsController(ITicketRepository ticketRepository, UserManager<User> userManager)
+        public TicketsController(ITicketRepository ticketRepository, UserManager<User> userManager, IFlightRepository flightRepository)
         {
             _ticketRepository = ticketRepository;
             _userManager = userManager;
+            _flightRepository = flightRepository;
         }
 
-        [HttpGet("FutureFlights")]
-        public async Task<IActionResult> GetFutureFlights()
+
+        [HttpGet]
+        public async Task<IActionResult> GetCustomerFlights()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            try
             {
-                return Unauthorized("User not found.");
-            }
 
-            var futureFlights = await _ticketRepository.GetAll()
-                .Where(t => t.PassengerId == user.Id && t.Flight.Date > DateTime.Now)
-                .Include(t => t.Flight)
-                    .ThenInclude(f => f.OriginCountry)
-                .Include(t => t.Flight)
-                    .ThenInclude(f => f.DestinationCountry)
-                .Include(t => t.Flight)
-                    .ThenInclude(f => f.Aircraft)
-                .Select(t => new
+                var emailClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+                var userEmail = emailClaim?.Value;
+
+                if (string.IsNullOrEmpty(userEmail))
                 {
-                    FlightNumber = t.Flight.FlightNumber,
-                    Date = t.Flight.Date,
-                    Origin =  t.Flight.OriginCountry.Name,
-                    Destination = t.Flight.DestinationCountry.Name,
-                    Aircraft = t.Flight.Aircraft.Name,
-                    Seat = t.Seat
-                }).ToListAsync();
+                    return NotFound("Usuário não encontrado.");
+                }
 
-            if (!futureFlights.Any())
-            {
-                return NotFound("Não foram encontrados voos futuros para este cliente.");
+
+                var tickets = await _ticketRepository.GetTicketsByUserEmailAsync(userEmail);
+
+                if (tickets == null || !tickets.Any())
+                {
+                    return NotFound("Nenhum voo futuro encontrado para este usuário.");
+                }
+
+
+                var ticketDetails = tickets.Select(t => new
+                {
+                    t.Id,
+                    PassengerName = t.PassengerFirstName + " " + t.PassengerLastName, 
+                    t.PassengerId,
+                    t.Seat,
+                    Flight = new
+                    {
+                        t.Flight.Id,
+                        t.Flight.FlightNumber,
+                        t.Flight.Date,
+                        Origin = t.Flight.OriginCountry.Name,
+                        Destination = t.Flight.DestinationCountry.Name,
+                        Aircraft = t.Flight.Aircraft.Name
+                    }
+                });
+
+                return Ok(ticketDetails);
             }
-
-
-            return Ok(futureFlights);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno no servidor: {ex.Message}");
+            }
         }
-
-
     }
 }

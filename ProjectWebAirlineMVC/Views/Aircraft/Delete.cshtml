@@ -36,9 +36,33 @@
 }
 
     <br />
-    <form asp-action="Delete">
+    <form asp-action="Delete" id="deleteForm">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> 
         <a asp-action="Index">Back</a>
     </form>
 </div>
+
+
+@section Scripts {
+    <script>
+        document.getElementById('deleteForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            Swal.fire({
+                title: 'Delete Confirmation',
+                text: "Are you sure about that?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    this.submit();
+                }
+            });
+        });
+    </script>
+}

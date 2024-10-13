@@ -288,6 +288,7 @@ namespace ProjectWebAirlineMVC.Controllers
 
 
         [HttpPost]
+        [Produces("application/json")]
         public async Task<IActionResult> CreateToken([FromBody] LoginViewModel model)
         {
             if (this.ModelState.IsValid)
@@ -313,7 +314,7 @@ namespace ProjectWebAirlineMVC.Controllers
                            _configuration["Tokens:Issuer"],
                            _configuration["Tokens:Audience"],
                            claims,
-                           expires: DateTime.UtcNow.AddDays(15),
+                           expires: DateTime.UtcNow.AddDays(60),
                            signingCredentials: credentials);
 
                         var results = new
