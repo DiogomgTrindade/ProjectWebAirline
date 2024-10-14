@@ -4,7 +4,7 @@
     ViewData["Title"] = "Ticket Details";
 }
 
-<h1>Ticket Details</h1>
+<h1 class="text-center">Ticket Details</h1>
 
 
 <div>
@@ -114,6 +114,6 @@
 
 
 <div>
-    <a asp-action="Index" class="btn btn-dark">Back to ticket list</a>
-    <a asp-action="DownloadPDF" asp-route-id="@Model.Id" class="btn btn-primary">Download PDF</a>
+    <a asp-action="Index" class="btn btn-light">Back to ticket list</a>
+    <a asp-action="DownloadPDF" asp-route-id="@Model.Id" class="btn btn-success">Download PDF</a>
 </div>

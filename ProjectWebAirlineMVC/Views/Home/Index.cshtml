@@ -2,7 +2,89 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div style="position: relative; text-align: center;">
+    <img src="~/images/homeAirplane.jpg" alt="Airplane" style="width: 100%; height: 30%; object-fit: cover;">
+
+
+    <div class="overlay-text" style="position: absolute; top: 25%; left: 5%; transform: translateY(-50%); color: black; max-width: 50%">
+        <h1 class="display-4">Discover A Beautiful Place With Us</h1>
+        <a class="btn btn-primary" style="background-color: #4479b6; border: none;" asp-area="" asp-controller="Flights" asp-action="Index">Let's Go Flying</a>
+    </div>
 </div>
+
+<section class="services-section py-5" style="text-align: center;">
+    <div class="container">
+        <h2 class="display-5 mb-4">WHY CHOOSE US</h2>
+        <p class="mb-5">With decades of experience, we ensure safety, comfort, and a seamless journey for every passenger.</p>
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div style="height: 200px; overflow: hidden;">
+                        <img src="~/images/crewStaf.jpg" class="card-img-top" alt="Experienced Staff" style="height: 100%; width: 100%; object-fit: cover;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">EXPERIENCED STAFF</h5>
+                        <p class="card-text">We have only top specialists who know how to solve all kinds of issues that may appear during your stay at our airport.</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div style="height: 200px; overflow: hidden;">
+                        <img src="~/images/improvements.jpg" class="card-img-top" alt="Constant Improvement" style="height: 100%; width: 100%; object-fit: cover;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">CONSTANT IMPROVEMENT</h5>
+                        <p class="card-text">We are striving for delivering services of superior quality, that is why we value your opinion and reviews a lot.</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div style="height: 200px; overflow: hidden;">
+                        <img src="~/images/airTransportation.jpg" class="card-img-top" alt="Air Transportation" style="height: 100%; width: 100%; object-fit: cover;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">AIR TRANSPORTATION</h5>
+                        <p class="card-text">We cooperate only with the world's most recognized aircraft manufacturers, ensuring quality.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="newsletter-section py-5" style="background-color: #f7f7f7; text-align: center;">
+    <div class="container">
+        <h2 class="display-5 mb-4">Stay Updated With Our Newsletter</h2>
+        <p class="mb-4">Subscribe to get the latest offers, flight updates, and more directly to your inbox!</p>
+        <form asp-controller="Account" asp-action="SubscribeNewsletter" method="post">
+            <div class="form-group">
+                <input type="email" name="email" class="form-control" style="max-width: 400px; margin: 0 auto;" placeholder="Enter your email" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+
+    </div>
+</section>
+
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}

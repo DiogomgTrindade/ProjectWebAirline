@@ -4,27 +4,41 @@
     ViewData["Title"] = "Index";
 }
 
-<p>
-    <a asp-action="Create">Create new Flight</a>
-</p>
+@if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Employee"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-warning"><i class="fa-solid fa-plus"></i> Create new Flight</a>
+    </p>
+}
+
+
+<form method="get" asp-action="Index">
+    <div class="form-group">
+        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Search by Flight Number, Origin, Destination">
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+</br>
+
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.First().FlightNumber)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["FlightSortParm"]">Flight Number</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().Aircraft)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AircraftSortParm"]">Aircraft</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().OriginCountry)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["OriginSortParm"]">Origin Country</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().DestinationCountry)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DestinationSortParm"]">Destination Country</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.First().Date)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">Date</a>
             </th>
             <th></th>
         </tr>
@@ -40,7 +54,7 @@
                     @Html.DisplayFor(modelItem => item.Aircraft.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.OriginCountry.Name) 
+                    @Html.DisplayFor(modelItem => item.OriginCountry.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DestinationCountry.Name)
@@ -49,12 +63,20 @@
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                    <a asp-area="" asp-controller="Tickets" asp-action="TicketList" asp-route-flightId="@item.Id">Buy Tickets</a>
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Employee"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary"><i class="fa-solid fa-pencil"></i> Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary"><i class="fa-solid fa-info"></i> Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Delete</a>
+                    }
+                    @if (this.User.IsInRole("Customer") || !this.User.Identity.IsAuthenticated)
+                    {
+                        <a asp-area="" asp-controller="Tickets" asp-action="TicketList" asp-route-flightId="@item.Id" class="btn btn-info">Buy Tickets</a>
+                    }
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+

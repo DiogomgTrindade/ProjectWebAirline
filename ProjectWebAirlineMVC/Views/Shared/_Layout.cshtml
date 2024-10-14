@@ -11,36 +11,31 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light custom-navbar border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Airline</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" alt="Airline logo" style="height: 50px"/></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Aircraft" asp-action="Index">Aircrafts</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Flights" asp-action="Index">Flights</a>
-                        </li>
                         @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="UsersListWithRoles">Users</a></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Countries" asp-action="Index">Countries</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="UsersListWithRoles"><i class="fa-solid fa-users"></i> Users</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Countries" asp-action="Index"><i class="fa-solid fa-globe"></i> Countries</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Aircraft" asp-action="Index"><i class="fa-solid fa-plane"></i> Aircrafts</a></li>
                                 </ul>
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Flights" asp-action="Index"><i class="fa-solid fa-plane-departure"></i> Flights</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy"><i class="fa-solid fa-shield-halved"></i> Privacy</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
@@ -50,9 +45,12 @@
                             if (user != null)
                             {
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@user.FullName</a>
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa-regular fa-user"></i> @user.FullName</a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="Index">Tickets</a></li>
+                                        @if (this.User.IsInRole("Customer"))
+                                        {
+                                            <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="Index">Tickets</a></li>
+                                        }
                                         <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangeUser">Change username</a></li>
                                         <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change password</a></li>
                                         <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
@@ -62,8 +60,12 @@
                             else
                             {
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@this.User.Identity.Name</a>
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa-regular fa-user"></i> @this.User.Identity.Name</a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        @if (this.User.IsInRole("Customer"))
+                                        {
+                                            <li><a class="dropdown-item" asp-area="" asp-controller="Tickets" asp-action="Index">Tickets</a></li>
+                                        }
                                         <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangeUser">Change User</a></li>
                                         <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a></li>
                                         <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
@@ -92,7 +94,9 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - ProjectWebAirlineMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - GlobeAirlines - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> |
+            <a href="https://www.linkedin.com/in/diogo-trindade-0695b0313/">LinkedIn</a> |
+            <a href="https://github.com/DiogomgTrindade">GitHub</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

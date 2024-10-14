@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using NotFoundViewResult = ProjectWebAirlineMVC.Helpers.NotFoundViewResult;
 
 namespace ProjectWebAirlineMVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CountriesController : Controller
     {
         private readonly DataContext _context;
@@ -120,12 +122,20 @@ namespace ProjectWebAirlineMVC.Controllers
             {
                 try
                 {
-
-                    bool countryExists = await _countryRepository.CountryNameExistsAsync(model.Name);
-                    if (countryExists)
+                    var existingCountry = await _countryRepository.GetByIdAsync(model.Id);
+                    if (existingCountry == null)
                     {
-                        ModelState.AddModelError(string.Empty, "Country already created.");
-                        return View(model);
+                        return new NotFoundViewResult("CountryNotFound");
+                    }
+
+                    if (!string.Equals(existingCountry.Name, model.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        bool countryExists = await _countryRepository.CountryNameExistsAsync(model.Name);
+                        if (countryExists)
+                        {
+                            ModelState.AddModelError(string.Empty, "Country already created.");
+                            return View(model);
+                        }
                     }
 
 

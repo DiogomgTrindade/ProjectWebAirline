@@ -38,11 +38,59 @@ namespace ProjectWebAirlineMVC.Controllers
         }
 
         // GET: Flights
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["FlightSortParm"] = String.IsNullOrEmpty(sortOrder) ? "flight_desc" : "";
+            ViewData["OriginSortParm"] = sortOrder == "Origin" ? "origin_desc" : "Origin";
+            ViewData["DestinationSortParm"] = sortOrder == "Destination" ? "destination_desc" : "Destination";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            ViewData["CurrentFilter"] = searchString;
+
+
             var flights = await _flightRepository.GetAllFlightsWithCountriesAndAircraftAsync();
+
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                flights = flights.Where(f => f.FlightNumber.ToString().Contains(searchString)
+                                            || f.OriginCountry.Name.Contains(searchString)
+                                            || f.DestinationCountry.Name.Contains(searchString)).ToList();
+            }
+
+
+            switch (sortOrder)
+            {
+                case "flight_desc":
+                    flights = flights.OrderByDescending(f => f.FlightNumber).ToList();
+                    break;
+                case "Origin":
+                    flights = flights.OrderBy(f => f.OriginCountry.Name).ToList();
+                    break;
+                case "origin_desc":
+                    flights = flights.OrderByDescending(f => f.OriginCountry.Name).ToList();
+                    break;
+                case "Destination":
+                    flights = flights.OrderBy(f => f.DestinationCountry.Name).ToList();
+                    break;
+                case "destination_desc":
+                    flights = flights.OrderByDescending(f => f.DestinationCountry.Name).ToList();
+                    break;
+                case "Date":
+                    flights = flights.OrderBy(f => f.Date).ToList();
+                    break;
+                case "date_desc":
+                    flights = flights.OrderByDescending(f => f.Date).ToList();
+                    break;
+                default:
+                    flights = flights.OrderBy(f => f.FlightNumber).ToList();
+                    break;
+            }
+
             return View(flights);
         }
+
 
 
         // GET: Flights/Details/5
@@ -67,7 +115,7 @@ namespace ProjectWebAirlineMVC.Controllers
 
 
         // GET: Flights/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Create()
         {
             //TODO: Add Aircrafts
@@ -171,7 +219,10 @@ namespace ProjectWebAirlineMVC.Controllers
             return View(model);
         }
 
+
+
         // GET: Flights/Edit/5
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -309,6 +360,7 @@ namespace ProjectWebAirlineMVC.Controllers
         }
 
         // GET: Flights/Delete/5
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

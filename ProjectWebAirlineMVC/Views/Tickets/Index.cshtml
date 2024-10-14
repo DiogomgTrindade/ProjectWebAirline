@@ -4,7 +4,7 @@
     ViewData["Title"] = "Your Tickets";
 }
 
-<h1>Your Tickets</h1>
+<h1 class="text-center">Your Tickets</h1>
 
 <table class="table">
     <thead>
@@ -41,7 +41,7 @@
                     @Html.DisplayFor(modelItem => item.Seat)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">Details</a>
                 </td>
             </tr>
         }

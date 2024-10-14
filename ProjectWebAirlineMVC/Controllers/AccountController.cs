@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -216,7 +217,7 @@ namespace ProjectWebAirlineMVC.Controllers
 
 
 
-
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> UsersListWithRoles()
         {
             var users = _userManager.Users.ToList().OrderBy(u => u.FullName);
@@ -238,6 +239,7 @@ namespace ProjectWebAirlineMVC.Controllers
             return View(userRolesViewModel);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeUserRole(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -266,6 +268,8 @@ namespace ProjectWebAirlineMVC.Controllers
 
             return View(model);
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> ChangeUserRole(ChangeUserRoleViewModel model)
@@ -398,8 +402,23 @@ namespace ProjectWebAirlineMVC.Controllers
             this.ModelState.AddModelError(string.Empty, "Error while trying to reset your password");
             return View(model);
         }
-    
 
+
+        [HttpPost]
+        public IActionResult SubscribeNewsletter(string email)
+        {
+            if(string.IsNullOrEmpty(email))
+            {
+                TempData["Error"] = "Please provide a valid email address.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            TempData["Success"] = "Thank you for subscribing to our newsletter!";
+
+            _mailHelper.SendEmail(email, "Newsletter Subscription", "Thank you for subscribing to our newsletter. Stay tuned for updates!");
+
+            return RedirectToAction("Index", "Home");
+        }
 
 
         public IActionResult NotAuthorized()

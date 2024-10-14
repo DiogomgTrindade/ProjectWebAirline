@@ -71,6 +71,40 @@ body {
 }
 
 
+/*My CSS
+-------------------------------------------------------------------------------------------------------*/
+
+.custom-navbar {
+    background-color: #4479b6;  /*NavBar Blue*/
+    border-bottom: 2px solid #2980b9;
+}
+
+.custom-navbar .nav-link {
+    color: white !important;
+}
+
+.custom-navbar .dropdown-toggle {
+    color: white !important;
+}
+
+.custom-navbar .dropdown-toggle:hover {
+    color: black !important;
+}
+
+.custom-navbar nav.nav-link:hover {
+    color: #4479b6 !important;
+}
+
+.custom-navbar .dropdown-menu .dropdown-item {
+    color: #4479b6;
+}
+
+.custom-navbar .dropdown-menu .dropdown-item:hover {
+    background-color: #4479b6; 
+    color: white;
+}
+
+
 
 
 

@@ -2,39 +2,49 @@
 @{
     ViewData["Title"] = "Index";
 }
-<h1>Countries List</h1>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @if (!string.IsNullOrEmpty(item.ImageFullPath))
-                    {
 
-                        <img src="@Url.Content(item.ImageFullPath)" alt="Image" style="width:100px; height:75px; max-width:100%" height="auto" />
+<h1 class="text-center">Countries List</h1>
+<div class="d-flex justify-content-center mb-3">
+    <a asp-action="Create" class="btn btn-warning"><i class="fa-solid fa-plus"></i> Create New</a>
+</div>
+</br>
+
+<div id="countryCarousel" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        @foreach (var item in Model.Select((value, index) => new { value, index }))
+        {
+            <div class="carousel-item @(item.index == 0 ? "active" : "")">
+                <div class="card text-center" style="width: 18rem; margin: auto;">
+                    @if (!string.IsNullOrEmpty(item.value.ImageFullPath))
+                    {
+                        <img class="card-img-top" src="@Url.Content(item.value.ImageFullPath)" alt="@item.value.Name" style=" object-fit: cover;">
                     }
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+                    <div class="card-body">
+                        <h5 class="card-title">@item.value.Name</h5>
+                        <a asp-action="Edit" asp-route-id="@item.value.Id" class="btn btn-primary"><i class="fa-solid fa-pencil"></i> Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.value.Id" class="btn btn-secondary"><i class="fa-solid fa-info"></i> Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.value.Id" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Delete</a>
+                    </div>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+
+    <a class="carousel-control-prev" href="#countryCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#countryCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
+
+
+<style>
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        filter: invert(100%);
+    }
+</style>

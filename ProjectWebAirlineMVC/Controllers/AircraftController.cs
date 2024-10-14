@@ -16,6 +16,7 @@ using NotFoundViewResult = ProjectWebAirlineMVC.Helpers.NotFoundViewResult;
 
 namespace ProjectWebAirlineMVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AircraftController : Controller
     {
         private readonly DataContext _context;
@@ -178,7 +179,7 @@ namespace ProjectWebAirlineMVC.Controllers
                     {
                         aircraftToUpdate.Capacity = model.Capacity;
 
-                        await _aircraftRepository.UpdateAsync(aircraftToUpdate);
+
 
                         var associatedFlights = await _context.Flights
                                                               .Include(f => f.Aircraft)
@@ -190,6 +191,9 @@ namespace ProjectWebAirlineMVC.Controllers
                             await _ticketRepository.UpdateTicketsFromFlightAsync(flight);
                         }
                     }
+
+                    await _aircraftRepository.UpdateAsync(aircraftToUpdate);
+
 
                     await _context.SaveChangesAsync();
                 }
