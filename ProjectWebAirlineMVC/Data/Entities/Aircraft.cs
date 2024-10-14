@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Syncfusion.EJ2.Spreadsheet;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace ProjectWebAirlineMVC.Data.Entities
 
 
         public string ImageFullPath => ImageId == Guid.Empty
-            ? $"https://supershopdmgt.azurewebsites.net/images/noimage.png"
+            ? "https://supershopdmgt.blob.core.windows.net/aircrafts/noImage.png"
             : $"https://supershopdmgt.blob.core.windows.net/aircrafts/{ImageId}";
 
 
