@@ -66,7 +66,7 @@ namespace ProjectWebAirlineMVC
             //Database
             services.AddDbContext<DataContext>(cfg =>
             {
-                cfg.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
+                cfg.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection1"));
             });
 
 
