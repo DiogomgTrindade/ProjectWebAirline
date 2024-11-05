@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using ProjectWebAirlineMVC.Controllers.API;
 using ProjectWebAirlineMVC.Data;
 using ProjectWebAirlineMVC.Data.Entities;
 using ProjectWebAirlineMVC.Data.Interfaces;
@@ -44,6 +46,8 @@ namespace ProjectWebAirlineMVC
                 cfg.Password.RequireLowercase = false;
                 cfg.Password.RequireNonAlphanumeric = false;
                 cfg.Password.RequiredLength = 6;
+                cfg.SignIn.RequireConfirmedAccount = true;
+
             })
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<DataContext>();
@@ -87,6 +91,8 @@ namespace ProjectWebAirlineMVC
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ITicketRepository, TicketRepository>();
 
+            //Mobile
+            services.AddScoped<IAuthService, AuthService>();
 
             services.ConfigureApplicationCookie(options =>
             {
